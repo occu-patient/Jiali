@@ -74,7 +74,9 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--char)}
 .summary div{background:rgba(243,238,227,.14);border-radius:12px;padding:8px 6px;text-align:center}
 .summary b{display:block;font-family:var(--serif);font-size:17px;letter-spacing:.03em}
 .summary span{font-size:11px;opacity:.8}
-.countdown{display:inline-block;margin-top:12px;background:var(--gold);color:var(--char);font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 12px}
+.hero-title{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px}
+.countdown.ended{background:rgba(243,238,227,.22);color:var(--cream)}
+.countdown{display:inline-block;margin-top:2px;background:var(--gold);color:var(--char);font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 12px}
 
 /* ===== Timeline ===== */
 .timeline{position:relative;padding:8px 16px 4px 16px}
@@ -278,7 +280,7 @@ body.owner .owner-bar{display:flex}
   .gallery img{height:220px}
   #introView{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px 28px 0;align-items:start}
   .chap{margin:0}
-  .chap:first-child{grid-column:1/-1}
+  .chap.wide{grid-column:1/-1}
   .geo-extra{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
   .geo-extra .compass{margin:0}
   .geo-extra .map-frame{height:100%;min-height:300px;margin:0}
@@ -318,6 +320,60 @@ body.owner .owner-bar{display:flex}
 .about-btn:active{background:var(--brick);color:var(--cream)}
 @media (hover:hover){.about-btn:hover{background:var(--brick);color:var(--cream)}}
 @media (max-width:360px){.brand .seal{padding:0 9px;font-size:14.5px;letter-spacing:.05em}.about-btn{padding:0 9px;font-size:12.5px}}
+
+/* ===== 搜尋 / 多日 / 分類 ===== */
+.top-right{display:flex;align-items:center;gap:10px}
+.search-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--sand);background:#fff;display:grid;place-items:center;color:var(--brick);flex-shrink:0}
+.search-btn svg,.search-box svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.search{position:fixed;inset:0;z-index:85;background:rgba(243,238,227,.98);display:none;flex-direction:column;max-width:900px;margin:0 auto}
+.search.show{display:flex}
+.search-box{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);color:var(--brick)}
+.search-box input{flex:1;min-width:0;border:1.5px solid var(--sand);background:#fff;border-radius:999px;padding:10px 16px;font-size:16px;outline:none}
+.search-box input:focus{border-color:var(--brick)}
+.search-box button{border:none;background:none;color:var(--brick);font-weight:700;font-size:15px}
+#searchResults{overflow-y:auto;padding:8px 16px 40px;flex:1}
+.s-count{font-size:12.5px;color:#7a7368;margin:8px 2px}
+.s-item{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;font-family:inherit;color:var(--char)}
+.s-item .s-tab{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 8px;margin-right:6px;color:var(--cream);vertical-align:2px}
+.s-item .s-title{font-family:var(--serif);font-weight:700;font-size:16px}
+.s-item .s-snip{font-size:13px;color:#6b655b;margin-top:4px;line-height:1.55}
+.s-item mark{background:#f3e3a6;color:var(--char);border-radius:3px;padding:0 1px}
+.s-empty{text-align:center;color:#8b8479;margin-top:40px;font-size:14px}
+.sum-line{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:rgba(243,238,227,.16);border-radius:12px;padding:9px 16px;font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.03em}
+.day-tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 0;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;border:1.5px solid var(--olive);background:#fff;color:var(--olive);border-radius:999px;padding:7px 14px;font-weight:700;font-size:13.5px}
+.day-tab small{font-weight:500;opacity:.85;margin-left:4px}
+.day-tab.active{background:var(--olive);color:var(--cream)}
+.day-tab.add{border-style:dashed;background:transparent}
+.cat-filter{display:flex;gap:8px;overflow-x:auto;padding:0 16px 14px;scrollbar-width:none}
+.cat-filter::-webkit-scrollbar{display:none}
+.cf{flex-shrink:0;border:1.5px solid var(--c);background:#fff;color:var(--char);border-radius:999px;padding:6px 13px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.cf i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.cf b{font-weight:500;opacity:.7;font-size:12px}
+.cf.active{background:var(--c);color:var(--t)}
+.cf.active i{background:var(--t)}
+.cat-filter{align-items:center;gap:10px;overflow:visible}
+.cf-label{font-size:13.5px;font-weight:700;color:var(--char);flex-shrink:0}
+.cf-sel{position:relative;display:flex;align-items:center;flex:0 1 280px;min-width:0}
+.cf-sel i{position:absolute;left:13px;width:10px;height:10px;border-radius:50%;pointer-events:none}
+.cf-sel select{appearance:none;-webkit-appearance:none;width:100%;border:1.5px solid var(--sand);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23963F32' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 13px center/12px;border-radius:12px;padding:9px 36px 9px 31px;font-size:15px;font-weight:700;color:var(--char);outline:none;cursor:pointer}
+.cf-sel select:focus{border-color:var(--brick)}
+.intro-filter{padding:16px 16px 0;grid-column:1/-1}
+body.owner .intro-filter{display:none}
+#introView > .chap:first-of-type{margin-top:16px}
+@media (min-width:768px){.intro-filter{padding:0}#introView > .chap:first-of-type{margin-top:0}}
+#catPanel .edit-card{margin:0 16px 14px}
+.cat-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.cat-row input[type=color]{width:42px;height:38px;border:1px solid var(--sand);border-radius:10px;padding:2px;background:#fff;flex-shrink:0}
+.cat-row input[type=text]{flex:1;min-width:0;border:1px solid var(--sand);background:var(--cream);border-radius:10px;padding:8px 10px;outline:none}
+.stop .card.highlight,.chap.highlight,.item.highlight{animation:hl 1.6s ease}
+@media (max-width:360px){#topTime{display:none}}
+@media (min-width:768px){.day-tabs{padding:18px 28px 0}.cat-filter{padding:0 28px 16px}#catPanel .edit-card{margin:0 28px 16px;max-width:600px}}
+@media (min-width:1100px){.day-tabs{padding:20px 40px 0}.cat-filter{padding:0 40px 18px}#catPanel .edit-card{margin:0 40px 18px}.search{left:220px}}
+.top-meta{white-space:nowrap}
+@media (max-width:480px){.topbar{padding:10px 12px}.brand .seal{padding:0 10px;font-size:15px;letter-spacing:.06em}.about-btn{padding:0 9px;font-size:12.5px}
+  .top-left{gap:6px}.top-right{gap:8px}.search-btn{width:34px;height:34px}.top-meta{font-size:11px}.top-meta b{font-size:12px}}
 </style>
 </head>
 <body>
@@ -329,7 +385,6 @@ body.owner .owner-bar{display:flex}
   <div class="splash-card">
     <div class="seal-big">佳</div>
     <h1>準備好所有行李<br>一起<span>回佳</span></h1>
-    <div class="info" id="splashInfo">2026.11.18（三）10:30–14:30</div>
     <div class="info">臺南市佳里區</div>
     <div class="rule"></div>
     <button id="agreeBtn">同意，出發！</button>
@@ -340,20 +395,17 @@ body.owner .owner-bar{display:flex}
 <div class="owner-bar"><span id="ownerText">🔓 編輯者模式（只有你看得到）</span><span><button class="sync-btn" id="syncBtn">☁️ 立即同步</button> <button id="lockBtn" class="local-only">🔒 鎖定</button></span></div>
 <header class="topbar">
   <div class="top-left"><div class="brand"><span class="seal">歡迎來「佳」</span></div><a class="about-btn" href="https://occupatient.org/" target="_blank" rel="noopener">關於Gwen</a></div>
-  <div class="top-meta"><b id="topDate">11/18（三）</b><br><span id="topTime">10:30–14:30</span></div>
+  <div class="top-right"><button class="search-btn" id="searchBtn" aria-label="搜尋"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+  <div class="top-meta" hidden><b id="topDate">11/18（三）</b><br><span id="topTime">10:30–14:30</span></div></div>
 </header>
 
 <!-- ========== 行程 ========== -->
 <section class="tab active" id="tab-trip">
   <div class="hero olive">
-    <h1>佳里行程</h1>
-    <p>老街小吃・百年廟宇・西拉雅文化・糖廠冰品</p>
-    <div class="summary" style="grid-template-columns:repeat(2,1fr)">
-      <div><b id="sumDate">11/18</b><span>導覽日期</span></div>
-      <div><b id="sumTime">10:30</b><span id="sumTimeSub">至 14:30</span></div>
-    </div>
-    <div class="countdown" id="countdown"></div>
+    <div class="hero-title"><h1>佳里行程</h1><span class="countdown" id="countdown"></span></div>
+    <div><div class="sum-line" id="sumLine">📅 2026-11-18（三）10:30–14:30</div></div>
   </div>
+  <div class="day-tabs" id="dayTabs"></div>
   <div class="toolbar">
     <button class="btn btn-ghost btn-sm owner-only" id="tripEditBtn">✏️ 編輯行程</button>
   </div>
@@ -396,14 +448,16 @@ body.owner .owner-bar{display:flex}
   <div class="toolbar" style="padding-bottom:14px">
     <button class="btn btn-ghost btn-sm" id="spotExpandAll">⇅ 全部展開</button>
     <button class="btn btn-ghost btn-sm owner-only" id="spotAdd">＋ 新增站點</button>
+    <button class="btn btn-ghost btn-sm owner-only" id="catManageBtn">🏷 管理分類</button>
   </div>
+  <div id="catPanel"></div>
+  <div class="cat-filter" id="catFilter"></div>
   <div id="spotList"></div>
 </section>
 
 <!-- ========== 來佳 ========== -->
 <section class="tab" id="tab-intro">
   <div class="quote">
-    <span class="mark">“</span>
     <blockquote>當別人問起「你住哪裡？」總會被白眼，<br>因為我住<em>佳里</em>。</blockquote>
     <div class="by">— 來「佳」・認識佳里 —</div>
   </div>
@@ -435,13 +489,21 @@ body.owner .owner-bar{display:flex}
   <input type="password" class="pw-input" id="pwInput" autocomplete="current-password" placeholder="密碼">
   <div class="btns"><button class="btn btn-soft" id="pwNo">取消</button><button class="btn btn-primary" id="pwYes">登入</button></div>
 </div></div>
+<div class="search" id="searchPanel">
+  <div class="search-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="searchInput" type="search" placeholder="搜尋站點、地址、活動、介紹、行李…" autocomplete="off"><button id="searchClose">取消</button></div>
+  <div id="searchResults"></div>
+</div>
+<datalist id="palette"><option>#963F32</option><option>#606B4C</option><option>#C2A36D</option><option>#39352F</option><option>#D9CDBB</option><option>#7A8C9E</option><option>#B5704F</option><option>#8A6D9E</option></datalist>
 <div class="toast" id="toast"></div>
 <input type="file" id="importFile" accept="application/json" style="display:none">
 </div>
 
 <script type="application/json" id="state">null</script>
 <script>
+/* ★★★★★ 設定：把 Google Apps Script 部署後的網址貼在下面兩個引號中間 ★★★★★ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbygfbFELKmos7ukvatFGgGrFT7290AakrNds34i-tOSCUNmjn1Ghuu8xSn1DiRhi7ZF/exec';
+/* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
 const CLOUD = !!API_URL;
 
 /* ================= 預設資料 ================= */
@@ -505,8 +567,17 @@ const DEFAULTS = {
      body:'日治時期，佳里出了一群用文字書寫故鄉的人。醫師作家吳新榮在佳里行醫，與郭水潭、徐清吉、王登山等人組成「佳里青風會」，後來成立「臺灣文藝聯盟佳里支部」。\n\n他們的作品充滿海風、鹽田與農村生活，被稱為「鹽分地帶文學」，在臺灣新文學史上占有一席之地。鹽分地帶文藝營延續至今，讓這片土地的文學香火不斷。'},
     {key:'food',title:'佳里美食與農特產品',en:'Food & Produce',
      body:'佳里的好味道多藏在市場與老街裡：一包肉脯、一碗米苔目、一塊冰涼的菜燕、一份剛起鍋的菜炸，最後用一支糖廠冰收尾。\n\n早年大片的甘蔗田撐起了製糖產業；今日溪北平原依然種植稻米、蔬菜與瓜果，四季都有在地的收成。\n（農特產品可在編輯模式補充）'}
-  ]
+  ],
+  cats:[{name:'信仰',color:'#963F32'},{name:'西拉雅',color:'#606B4C'},{name:'美食',color:'#D9CDBB'},{name:'歷史',color:'#C2A36D'},{name:'其他',color:'#39352F'}]
 };
+DEFAULTS.days=[{date:DEFAULTS.meta.date,start:DEFAULTS.meta.start,end:DEFAULTS.meta.end,trip:DEFAULTS.trip}];
+const DATA_KEYS=['days','pack','spots','intro','cats'];
+function normalize(d){
+  if(!d)return d;
+  if(!d.days&&d.trip){const m=d.meta||DEFAULTS.meta;d.days=[{date:m.date,start:m.start,end:m.end,trip:d.trip}];}
+  if(!d.cats)d.cats=JSON.parse(JSON.stringify(DEFAULTS.cats));
+  delete d.meta;delete d.trip;return d;
+}
 
 /* ================= 儲存 ================= */
 const SRC='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
@@ -516,19 +587,32 @@ const APP_BODY=document.querySelector('.app').outerHTML;
 let EMB=null;try{EMB=JSON.parse(document.getElementById('state').textContent);}catch(e){}
 const PUBLISHED=/*__DATA__*/null;   // 分享版會把資料寫在這裡，並停用編輯
 let CACHE=null;if(CLOUD){try{CACHE=JSON.parse(localStorage.getItem('huijia_cloud_cache')||'null');}catch(e){}}
-const PUB=PUBLISHED||EMB||(CLOUD?(CACHE||JSON.parse(JSON.stringify(DEFAULTS))):null);
+const PUB=normalize(PUBLISHED||EMB||(CLOUD?(CACHE||JSON.parse(JSON.stringify(DEFAULTS))):null));
 let LIVE=false,ART=null,ASSETS=null;
 const KEY=PUB?'huijia_pub_':'huijia_v2_';
 const clone=o=>JSON.parse(JSON.stringify(o));
 function getDone(){try{return JSON.parse(localStorage.getItem(KEY+'done')||'[]');}catch(e){return [];}}
 function load(k){
-  if(PUB){if(k==='pack'){const d=getDone();return PUB.pack.map(p=>({...p,done:d.includes(p.id)}));}return clone(PUB[k]);}
-  try{const v=localStorage.getItem(KEY+k);return v?JSON.parse(v):clone(DEFAULTS[k]);}catch(e){return clone(DEFAULTS[k]);}}
+  if(PUB){if(k==='pack'){const d=getDone();return (PUB.pack||DEFAULTS.pack).map(p=>({...p,done:d.includes(p.id)}));}return clone(PUB[k]??DEFAULTS[k]);}
+  try{const v=localStorage.getItem(KEY+k);if(v)return JSON.parse(v);
+    if(k==='days'){const m=localStorage.getItem(KEY+'meta'),t=localStorage.getItem(KEY+'trip');
+      if(t)return normalize({meta:m?JSON.parse(m):DEFAULTS.meta,trip:JSON.parse(t)}).days;}
+  }catch(e){}
+  return clone(DEFAULTS[k]);}
 function save(k){
+  if(k==='trip'||k==='meta')k='days';
   if(k!=='pack')markDirty();
   if(PUB){if(k==='pack'){try{localStorage.setItem(KEY+'done',JSON.stringify(S.pack.filter(p=>p.done).map(p=>p.id)));}catch(e){}}return true;}
   try{localStorage.setItem(KEY+k,JSON.stringify(S[k]));return true;}catch(e){toast('⚠️ 儲存空間不足，請減少照片');return false;}}
-const S={meta:load('meta'),trip:load('trip'),pack:load('pack'),spots:load('spots'),intro:load('intro')};
+const S={days:load('days'),pack:load('pack'),spots:load('spots'),intro:load('intro'),cats:load('cats')};
+let curDay=0;
+function setDay(i){if(!S.days.length)S.days.push({date:DEFAULTS.meta.date,start:'09:00',end:'17:00',trip:[]});
+  curDay=Math.max(0,Math.min(i,S.days.length-1));
+  Object.defineProperty(S,'meta',{value:S.days[curDay],configurable:true,enumerable:false,writable:true});
+  Object.defineProperty(S,'trip',{value:S.days[curDay].trip,configurable:true,enumerable:false,writable:true});}
+function ensureCats(){S.spots.forEach(sp=>{if(sp.cat&&!S.cats.some(c=>c.name===sp.cat))S.cats.push({name:sp.cat,color:'#39352F'});});}
+function pickData(){const o={};DATA_KEYS.forEach(k=>o[k]=clone(S[k]));o.pack.forEach(p=>p.done=false);return o;}
+setDay(0);ensureCats();
 
 /* ================= 工具 ================= */
 const $=s=>document.querySelector(s);
@@ -546,26 +630,44 @@ $('#agreeBtn').onclick=()=>{$('#splash').classList.add('hide');try{sessionStorag
 try{if(sessionStorage.getItem('huijia_agreed')==='1')$('#splash').classList.add('hide');}catch(e){}
 
 /* ================= Meta ================= */
+function fmtD(ds){const d=new Date((ds||'2026-01-01')+'T00:00:00');const MM=String(d.getMonth()+1).padStart(2,'0'),DD=String(d.getDate()).padStart(2,'0');
+  return {d,md:(d.getMonth()+1)+'/'+d.getDate(),mmdd:MM+'/'+DD,ymd:d.getFullYear()+'-'+MM+'-'+DD,wk:'（'+WEEK[d.getDay()]+'）'};}
 function renderMeta(){
-  const m=S.meta,d=new Date(m.date+'T00:00:00');
-  const md=(d.getMonth()+1)+'/'+d.getDate(),wk='（'+WEEK[d.getDay()]+'）';
-  $('#topDate').textContent=md+wk;$('#topTime').textContent=m.start+'–'+m.end;
-  $('#sumDate').textContent=md;$('#sumTime').textContent=m.start;$('#sumTimeSub').textContent='至 '+m.end;
-  $('#splashInfo').textContent=d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0')+wk+m.start+'–'+m.end;
-  const today=new Date();today.setHours(0,0,0,0);const diff=Math.round((d-today)/864e5);
-  $('#countdown').textContent=diff>0?'距離出發還有 '+diff+' 天':diff===0?'就是今天！一起回佳 🚗':'旅程已完成，謝謝一起回佳';
+  const m=S.meta,f=fmtD(m.date),n=S.days.length;
+  if(n>1){const a=fmtD(S.days[0].date),b=fmtD(S.days[n-1].date);$('#topDate').textContent=a.md+'–'+b.md;$('#topTime').textContent='共 '+n+' 天';}
+  else{$('#topDate').textContent=f.md+f.wk;$('#topTime').textContent=m.start+'–'+m.end;}
+  $('#sumLine').textContent='📅 '+(n>1?'第'+(curDay+1)+'天・':'')+f.ymd+f.wk+' '+m.start+'–'+m.end;
+  const sorted=[...S.days].sort((a,b)=>(a.date+(a.end||'')).localeCompare(b.date+(b.end||'')));
+  const first=fmtD(sorted[0].date).d,last=sorted[sorted.length-1];
+  const lastEnd=new Date(last.date+'T'+(last.end||'23:59')+':00'),now=new Date();
+  const today=new Date();today.setHours(0,0,0,0);const diff=Math.round((first-today)/864e5);
+  const cd=$('#countdown');cd.classList.toggle('ended',now>lastEnd);
+  cd.textContent=now>lastEnd?'已結束':diff>0?'距離出發還有 '+diff+' 天':(n>1?'旅程進行中 🚗':'就是今天！一起回佳 🚗');
 }
 
 /* ================= 行程 ================= */
 let tripEdit=false;
 function spotOptions(sel){return '<option value="">（不連結）</option>'+S.spots.map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${esc(s.name)}</option>`).join('');}
+function renderDayTabs(){
+  const box=$('#dayTabs'),n=S.days.length;
+  let h=S.days.map((d,i)=>{const f=fmtD(d.date);return `<button class="day-tab ${i===curDay?'active':''}" data-day="${i}">第${i+1}天<small>${f.mmdd}</small></button>`;}).join('');
+  h+=`<button class="day-tab add owner-only" id="dayAdd">＋ 新增天數</button>`;
+  box.innerHTML=h;box.style.display=(n>1||document.body.classList.contains('owner'))?'':'none';
+  box.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{setDay(+b.dataset.day);renderMeta();renderTrip();});
+  $('#dayAdd').onclick=()=>{const last=S.days[S.days.length-1];const nd=new Date(last.date+'T00:00:00');nd.setDate(nd.getDate()+1);
+    const ds=nd.getFullYear()+'-'+String(nd.getMonth()+1).padStart(2,'0')+'-'+String(nd.getDate()).padStart(2,'0');
+    S.days.push({date:ds,start:'09:00',end:'17:00',trip:[]});setDay(S.days.length-1);save('days');
+    if(!tripEdit)$('#tripEditBtn').click();else renderTrip();renderMeta();toast('已新增第'+S.days.length+'天');};
+}
 function renderTrip(){
+  renderDayTabs();
   const v=$('#tripView');
   if(tripEdit){
     const m=S.meta;
-    let h=`<div class="edit-banner">編輯模式：修改後自動儲存，按「完成」會依時間重新排序。</div>
+    let h=`<div class="edit-banner">編輯模式：修改後自動儲存，按「完成」會依時間重新排序並同步。</div>
     <div class="edit-card" style="border-color:var(--gold)"><div class="row">
-      <div class="field"><label>導覽日期</label><input type="date" data-meta="date" value="${m.date}"></div>
+      <div class="field"><label>第${curDay+1}天・導覽日期</label><input type="date" data-meta="date" value="${m.date}"></div>
+      ${S.days.length>1?`<div style="display:flex;align-items:flex-end"><button class="btn btn-ghost btn-sm" id="dayDel">🗑 刪除這一天</button></div>`:''}
       </div>
       <div class="row" style="margin:0"><div class="field"><label>開始</label><input type="time" data-meta="start" value="${m.start}"></div>
       <div class="field"><label>結束</label><input type="time" data-meta="end" value="${m.end}"></div></div></div>`;
@@ -584,11 +686,12 @@ function renderTrip(){
     v.innerHTML=h;bindTripEdit();return;
   }
   let h='<div class="timeline">';
+  if(!S.trip.length)h+='<p class="hint" style="padding:10px 0">這一天還沒有安排行程。</p>';
   S.trip.forEach((t,i)=>{
     const next=S.trip[i+1],endT=next?next.time:S.meta.end;const stay=toMin(endT)-toMin(t.time);
     const acts=splitTags(t.act).map(a=>`<span class="chip">${esc(a)}</span>`).join('');
     const sp=S.spots.find(s=>s.id===t.spot);
-    h+=`<div class="stop ${i===S.trip.length-1?'':''}">
+    h+=`<div class="stop" id="stop-${i}">
       <div class="time">${esc(t.time)}</div>
       <div class="rail"><div class="dot">${t.mode==='開車'?'🚗':'🚶'}</div></div>
       <div class="card">
@@ -608,7 +711,7 @@ function renderTrip(){
 }
 function bindTripEdit(){
   const v=$('#tripView');
-  v.querySelectorAll('[data-meta]').forEach(inp=>inp.oninput=()=>{const k=inp.dataset.meta;S.meta[k]=k==='people'?Math.max(1,+inp.value||1):inp.value;save('meta');renderMeta();});
+  v.querySelectorAll('[data-meta]').forEach(inp=>inp.oninput=inp.onchange=()=>{S.meta[inp.dataset.meta]=inp.value;save('meta');renderMeta();renderDayTabs();});
   v.querySelectorAll('.edit-card[data-i]').forEach(card=>{
     const i=+card.dataset.i;
     card.querySelectorAll('[data-f]').forEach(inp=>{inp.oninput=inp.onchange=()=>{S.trip[i][inp.dataset.f]=inp.value;save('trip');};});
@@ -619,17 +722,19 @@ function bindTripEdit(){
       else if(a==='del'){if(!await confirmBox('刪除這一站？','「'+(S.trip[i].name||'未命名')+'」將從行程移除。','刪除'))return;S.trip.splice(i,1);}
       save('trip');renderTrip();});
   });
+  if($('#dayDel'))$('#dayDel').onclick=async()=>{if(!await confirmBox('刪除第'+(curDay+1)+'天？','這一天的所有行程站點都會刪除。','刪除'))return;
+    S.days.splice(curDay,1);setDay(Math.min(curDay,S.days.length-1));save('days');renderMeta();renderTrip();renderSpots();};
   $('#tripAddRow').onclick=()=>{const last=S.trip[S.trip.length-1];S.trip.push({time:last?last.time:S.meta.start,name:'新站點',mode:'開車',act:'',addr:'',spot:''});save('trip');renderTrip();setTimeout(()=>v.querySelector('.edit-card[data-i]:last-of-type')?.scrollIntoView({behavior:'smooth',block:'center'}),50);};
   $('#exportBtn').onclick=exportData;$('#shareBtn').onclick=exportShare;$('#importBtn').onclick=()=>$('#importFile').click();
   $('#resetBtn').onclick=async()=>{if(!await confirmBox('還原預設資料？','行程、行李、站點與介紹都會回到最初版本，上傳的照片也會清除。','還原'))return;
-    Object.keys(DEFAULTS).forEach(k=>{S[k]=clone(DEFAULTS[k]);save(k);});renderAll();toast('已還原預設');publishLive();};
+    DATA_KEYS.forEach(k=>{S[k]=clone(DEFAULTS[k]);save(k);});setDay(0);renderAll();toast('已還原預設');publishLive();};
 }
 $('#tripEditBtn').onclick=()=>{
   tripEdit=!tripEdit;
-  if(!tripEdit){S.trip.sort((a,b)=>toMin(a.time)-toMin(b.time));save('trip');toast('✓ 行程已儲存');publishLive();}
+  if(!tripEdit){S.days.forEach(d=>d.trip.sort((a,b)=>toMin(a.time)-toMin(b.time)));save('days');toast('✓ 行程已儲存');publishLive();}
   $('#tripEditBtn').innerHTML=tripEdit?'✓ 完成':'✏️ 編輯行程';
   $('#tripEditBtn').className='btn btn-sm owner-only '+(tripEdit?'btn-primary':'btn-ghost');
-  renderTrip();
+  renderTrip();renderMeta();
 };
 
 /* ================= 行李 ================= */
@@ -673,22 +778,61 @@ $('#packInput').onkeydown=e=>{if(e.key==='Enter')$('#packAddBtn').click();};
 
 /* ================= 站點 ================= */
 const openSpots=new Set(),openStory=new Set();let editingSpot=null;
-const CATS=['信仰','西拉雅','美食','歷史','其他'];
+let spotFilter='',catManage=false;
+function catOf(name){return S.cats.find(c=>c.name===name)||{name:name||'未分類',color:'#39352F'};}
+function txtOn(hex){const h=String(hex||'#000').replace('#','');const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
+  return (0.299*r+0.587*g+0.114*b)/255>0.62?'#39352F':'#F3EEE3';}
+function findStop(id){for(let di=0;di<S.days.length;di++){const t=S.days[di].trip.find(x=>x.spot===id);if(t)return {di,t};}return null;}
+function renderCatFilter(){
+  const counts={};S.spots.forEach(s=>counts[s.cat]=(counts[s.cat]||0)+1);
+  const own=document.body.classList.contains('owner');
+  let h=`<label class="cf-label" for="cfSelect">分類</label><div class="cf-sel"><i id="cfDot"></i><select id="cfSelect"><option value="">全部（${S.spots.length}）</option>`;
+  S.cats.forEach(c=>{if(!counts[c.name]&&!own)return;h+=`<option value="${esc(c.name)}" ${spotFilter===c.name?'selected':''}>${esc(c.name)}（${counts[c.name]||0}）</option>`;});
+  h+='</select></div>';
+  const box=$('#catFilter');box.innerHTML=h;
+  const cur=S.cats.find(c=>c.name===spotFilter);$('#cfDot').style.background=cur?cur.color:'var(--brick)';
+  $('#cfSelect').onchange=e=>{spotFilter=e.target.value;renderSpots();};
+}
+function renderCatPanel(){
+  const box=$('#catPanel');if(!catManage){box.innerHTML='';return;}
+  let h='<div class="edit-card"><label style="font-size:12px;color:var(--olive);font-weight:700">分類名稱與顏色（修改名稱會一併更新站點）</label><div style="margin-top:8px">';
+  S.cats.forEach((c,i)=>{h+=`<div class="cat-row"><input type="color" list="palette" data-cc="${i}" value="${esc(c.color)}"><input type="text" data-cn="${i}" value="${esc(c.name)}"><button class="icon-btn danger" data-cd="${i}">✕</button></div>`;});
+  h+=`</div><div class="cat-row" style="margin-top:12px"><input type="color" list="palette" id="newCatColor" value="#7A8C9E"><input type="text" id="newCatName" placeholder="新分類名稱，例如：自然景觀"><button class="btn btn-olive btn-sm" id="newCatAdd">＋</button></div></div>`;
+  box.innerHTML=h;
+  box.querySelectorAll('[data-cc]').forEach(inp=>inp.oninput=()=>{S.cats[+inp.dataset.cc].color=inp.value;save('cats');renderCatFilter();renderSpots(true);});
+  box.querySelectorAll('[data-cn]').forEach(inp=>inp.onchange=()=>{const c=S.cats[+inp.dataset.cn],nv=inp.value.trim();if(!nv||S.cats.some(x=>x!==c&&x.name===nv)){inp.value=c.name;toast('分類名稱不可空白或重複');return;}
+    S.spots.forEach(sp=>{if(sp.cat===c.name)sp.cat=nv;});if(spotFilter===c.name)spotFilter=nv;c.name=nv;save('cats');save('spots');renderSpots();});
+  box.querySelectorAll('[data-cd]').forEach(b=>b.onclick=async()=>{const i=+b.dataset.cd,c=S.cats[i];
+    if(S.cats.length<=1){toast('至少要保留一個分類');return;}
+    const used=S.spots.filter(sp=>sp.cat===c.name).length;
+    if(!await confirmBox('刪除分類「'+c.name+'」？',used?'有 '+used+' 個站點使用這個分類，會改到「'+S.cats.find(x=>x!==c).name+'」。':'這個分類目前沒有站點使用。','刪除'))return;
+    const to=S.cats.find(x=>x!==c).name;S.spots.forEach(sp=>{if(sp.cat===c.name)sp.cat=to;});S.cats.splice(i,1);if(spotFilter===c.name)spotFilter='';
+    save('cats');save('spots');renderCatPanel();renderSpots();});
+  $('#newCatAdd').onclick=()=>{const nm=$('#newCatName').value.trim();if(!nm){$('#newCatName').focus();return;}
+    if(S.cats.some(c=>c.name===nm)){toast('已經有這個分類');return;}
+    S.cats.push({name:nm,color:$('#newCatColor').value});save('cats');renderCatPanel();renderSpots();toast('已新增分類：'+nm);};
+  $('#newCatName').onkeydown=e=>{if(e.key==='Enter')$('#newCatAdd').click();};
+}
+$('#catManageBtn').onclick=()=>{catManage=!catManage;if(!catManage)publishLive();
+  $('#catManageBtn').innerHTML=catManage?'✓ 完成':'🏷 管理分類';$('#catManageBtn').className='btn btn-sm owner-only '+(catManage?'btn-primary':'btn-ghost');renderCatPanel();renderCatFilter();};
 function renderSpots(){
+  renderCatFilter();
   let h='';
-  S.spots.forEach(s=>{
+  const list=S.spots.filter(s=>!spotFilter||s.cat===spotFilter);
+  if(!list.length)h='<p class="hint">這個分類目前沒有站點。</p>';
+  list.forEach(s=>{
     const open=openSpots.has(s.id),cover=s.imgs&&s.imgs[0];
-    const t=S.trip.find(x=>x.spot===s.id);const mode=t?t.mode:'開車';
-    h+=`<div class="spot cat-${esc(s.cat)} ${open?'open':''}" id="spot-${s.id}">
+    const fs=findStop(s.id),t=fs&&fs.t;const mode=t?t.mode:'開車';const cc=catOf(s.cat);
+    h+=`<div class="spot ${open?'open':''}" id="spot-${s.id}" style="border-top:4px solid ${esc(cc.color)}">
       <div class="spot-head" data-toggle="${s.id}">
-        <div class="meta"><div class="ttl">${esc(s.name)}</div><div class="sub">${t?'⏰ '+esc(t.time)+'・':''}${esc(s.cat)}・${esc(splitTags(s.tags).slice(0,3).join('・'))}</div></div>
+        <div class="meta"><div class="ttl" style="background:${esc(cc.color)};color:${txtOn(cc.color)}">${esc(s.name)}</div><div class="sub">${t?'⏰ '+(S.days.length>1?'第'+(fs.di+1)+'天 ':'')+esc(t.time)+'・':''}${esc(s.cat)}・${esc(splitTags(s.tags).slice(0,3).join('・'))}</div></div>
         <div class="arrow">▼</div></div>
       <div class="spot-body"><div class="spot-inner">`;
     if(editingSpot===s.id){
       h+=`<div class="edit-card" style="margin:0 0 4px">
         <div class="row"><div class="field"><label>站點名稱</label><input data-sf="name" value="${esc(s.name)}"></div>
 </div>
-        <div class="row"><div class="field"><label>分類（決定配色）</label><select data-sf="cat">${CATS.map(c=>`<option ${c===s.cat?'selected':''}>${c}</option>`).join('')}</select></div></div>
+        <div class="row"><div class="field"><label>分類（決定配色）</label><select data-sf="cat">${S.cats.map(c=>`<option ${c.name===s.cat?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div></div>
         <div class="field" style="margin-bottom:8px"><label>照片（第一張為封面）</label>
           <div class="img-edit">${(s.imgs||[]).map((src,k)=>`<div><img src="${src}"><button data-rmimg="${k}">✕</button></div>`).join('')}</div>
           <label class="upload">📷 上傳照片<input type="file" accept="image/*" multiple data-upload="${s.id}"></label></div>
@@ -721,10 +865,10 @@ function renderSpots(){
   L.querySelectorAll('[data-donespot]').forEach(b=>b.onclick=()=>{editingSpot=null;save('spots');renderSpots();renderTrip();toast('✓ 站點已儲存');publishLive();});
   L.querySelectorAll('[data-delspot]').forEach(b=>b.onclick=async()=>{const id=b.dataset.delspot;const sp=S.spots.find(x=>x.id===id);
     if(!await confirmBox('刪除站點？','「'+sp.name+'」的介紹與照片都會刪除。','刪除'))return;
-    S.spots=S.spots.filter(x=>x.id!==id);S.trip.forEach(t=>{if(t.spot===id)t.spot='';});save('spots');save('trip');editingSpot=null;renderSpots();renderTrip();publishLive();});
+    S.spots=S.spots.filter(x=>x.id!==id);S.days.forEach(d=>d.trip.forEach(t=>{if(t.spot===id)t.spot='';}));save('spots');save('days');editingSpot=null;renderSpots();renderTrip();publishLive();});
   if(editingSpot){const s=S.spots.find(x=>x.id===editingSpot);const box=$('#spot-'+editingSpot);
     box.querySelectorAll('[data-sf]').forEach(inp=>inp.oninput=inp.onchange=()=>{s[inp.dataset.sf]=inp.value;save('spots');
-      if(inp.dataset.sf==='cat')box.className='spot open cat-'+inp.value;
+      if(inp.dataset.sf==='cat'){const cc=catOf(inp.value);box.style.borderTopColor=cc.color;const tt=box.querySelector('.ttl');tt.style.background=cc.color;tt.style.color=txtOn(cc.color);renderCatFilter();}
       if(inp.dataset.sf==='name')box.querySelector('.ttl').textContent=inp.value;});
     box.querySelectorAll('[data-rmimg]').forEach(b=>b.onclick=()=>{s.imgs.splice(+b.dataset.rmimg,1);save('spots');renderSpots();});
     const up=box.querySelector('[data-upload]');up.onchange=async()=>{
@@ -739,11 +883,11 @@ function renderSpots(){
 function compress(file,max=1000,q=.72){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{
   let w=img.width,h=img.height;if(w>max||h>max){const k=max/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k);}
   const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',q));};img.onerror=rej;img.src=r.result;};r.onerror=rej;r.readAsDataURL(file);});}
-$('#spotExpandAll').onclick=()=>{const all=openSpots.size<S.spots.length;S.spots.forEach(s=>all?openSpots.add(s.id):openSpots.delete(s.id));
+$('#spotExpandAll').onclick=()=>{const vis=S.spots.filter(s=>!spotFilter||s.cat===spotFilter);const all=vis.some(s=>!openSpots.has(s.id));vis.forEach(s=>all?openSpots.add(s.id):openSpots.delete(s.id));
   $('#spotExpandAll').innerHTML=all?'⇅ 全部收合':'⇅ 全部展開';renderSpots();};
-$('#spotAdd').onclick=()=>{const id='s'+Date.now();S.spots.push({id,name:'新站點',cat:'其他',addr:'',intro:'',tags:'',story:'',imgs:[]});
+$('#spotAdd').onclick=()=>{const id='s'+Date.now();S.spots.push({id,name:'新站點',cat:spotFilter||(S.cats[S.cats.length-1]||{}).name||'其他',addr:'',intro:'',tags:'',story:'',imgs:[]});
   save('spots');openSpots.add(id);editingSpot=id;renderSpots();setTimeout(()=>$('#spot-'+id).scrollIntoView({behavior:'smooth',block:'start'}),60);};
-function gotoSpot(id){switchTab('spot');openSpots.add(id);openStory.add(id);renderSpots();
+function gotoSpot(id){const sp=S.spots.find(x=>x.id===id);if(sp&&spotFilter&&sp.cat!==spotFilter)spotFilter='';switchTab('spot');openSpots.add(id);openStory.add(id);renderSpots();
   setTimeout(()=>{const el=$('#spot-'+id);if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+scrollY-64,behavior:'smooth'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),1700);},80);}
 
 /* ================= 來佳 ================= */
@@ -812,39 +956,58 @@ const COMPASS=`<svg class="compass" viewBox="0 0 340 360" xmlns="http://www.w3.o
   <text x="330" y="352" text-anchor="end" font-size="8.5" fill="#9a9286" font-family="Noto Sans TC, sans-serif">手繪示意・非實際比例</text>
 </svg>`;
 const FOOD=[['肉脯','中山路老店手工肉脯'],['米苔目','市場裡的米食老味道'],['菜燕','石花菜做的消暑涼品'],['菜炸','蔬菜裹粉現炸小吃'],['南北貨','乾貨香料一次買齊'],['糖廠冰','蕭壠園區必吃冰品']];
+let introFilter='';
 function renderIntro(){
   let h='';
+  if(introFilter&&!S.intro[+introFilter-1])introFilter='';
+  if(!introEdit){
+    h+=`<div class="cat-filter intro-filter"><label class="cf-label" for="introSel">章節</label><div class="cf-sel"><i style="background:var(--gold)"></i><select id="introSel"><option value="">全部章節（${S.intro.length}）</option>`+
+      S.intro.map((c,i)=>`<option value="${i+1}" ${introFilter==String(i+1)?'selected':''}>${String(i+1).padStart(2,'0')}　${esc(c.title)}</option>`).join('')+`</select></div></div>`;
+  }else{
+    h+=`<div class="edit-banner" style="grid-column:1/-1;margin:0 0 4px">編輯模式：可修改標題、英文副標與內文，用 ↑↓ 調整順序，最下方可新增章節。按「完成」同步。</div>`;
+  }
   S.intro.forEach((c,i)=>{
-    h+=`<article class="chap"><div class="chap-head"><div class="chap-num">0${i+1}</div><h2>${esc(c.title)}<small>${esc(c.en||'')}</small></h2></div>`;
+    if(!introEdit&&introFilter&&introFilter!=String(i+1))return;
+    const wide=c.key==='geo'||(introFilter&&!introEdit);
+    h+=`<article class="chap${wide?' wide':''}" id="chap-${i}"><div class="chap-head"><div class="chap-num">${String(i+1).padStart(2,'0')}</div><h2>${esc(c.title)}<small>${esc(c.en||'')}</small></h2></div>`;
     if(introEdit){
-      h+=`<div style="padding:4px 16px 16px"><div class="field" style="margin-bottom:8px"><label>標題</label><input data-ii="${i}" data-k="title" value="${esc(c.title)}"></div>
-        <div class="field"><label>內文</label><textarea data-ii="${i}" data-k="body" rows="8">${esc(c.body)}</textarea></div></div>`;
+      h+=`<div style="padding:4px 16px 16px"><div class="row" style="display:flex;gap:8px;margin-bottom:8px"><div class="field"><label>標題</label><input data-ii="${i}" data-k="title" value="${esc(c.title)}"></div>
+        <div class="field" style="flex:.8"><label>英文副標（可空白）</label><input data-ii="${i}" data-k="en" value="${esc(c.en||'')}"></div></div>
+        <div class="field"><label>內文</label><textarea data-ii="${i}" data-k="body" rows="8">${esc(c.body)}</textarea></div>
+        <div class="edit-tools"><button class="icon-btn" data-im="up" data-i="${i}">↑</button><button class="icon-btn" data-im="down" data-i="${i}">↓</button><button class="icon-btn danger" data-im="del" data-i="${i}">🗑</button></div></div>`;
     }else{
       h+=`<div class="chap-body">${esc(c.body)}</div>`;
     }
     if(c.key==='geo'){h+=`<div class="geo-extra" style="padding:0 16px 16px">${COMPASS}
       <iframe class="map-frame local-only" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent('臺南市佳里區')}&z=12&output=embed" title="佳里區地圖"></iframe>
       <div class="actions geo-act" style="margin-top:10px"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('臺南市佳里區')}" target="_blank" rel="noopener">📍 在 Google Map 開啟佳里</a></div></div>`;}
-    if(c.key==='food'&&!introEdit){h+=`<div class="foodgrid">${FOOD.map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join('')}</div>`;}
-    if(c.key==='faith'&&!introEdit){h+=`<div style="padding:0 16px 16px" class="actions"><button class="link-btn" data-goto="jintang">📜 金唐殿</button><button class="link-btn" data-goto="beitouyang">📜 北頭洋</button></div>`;}
     h+='</article>';
   });
+  if(introEdit)h+=`<div style="grid-column:1/-1"><button class="btn btn-olive btn-block" id="introAdd">＋ 新增章節</button></div>`;
   const v=$('#introView');v.innerHTML=h;
   v.querySelectorAll('[data-ii]').forEach(inp=>inp.oninput=()=>{S.intro[+inp.dataset.ii][inp.dataset.k]=inp.value;save('intro');});
-  v.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{if(S.spots.find(s=>s.id===b.dataset.goto))gotoSpot(b.dataset.goto);else toast('找不到這個站點');});
+  v.querySelectorAll('[data-im]').forEach(btn=>btn.onclick=async()=>{const i=+btn.dataset.i,a=btn.dataset.im;
+    if(a==='up'&&i>0)[S.intro[i-1],S.intro[i]]=[S.intro[i],S.intro[i-1]];
+    else if(a==='down'&&i<S.intro.length-1)[S.intro[i+1],S.intro[i]]=[S.intro[i],S.intro[i+1]];
+    else if(a==='del'){if(!await confirmBox('刪除這個章節？','「'+(S.intro[i].title||'未命名')+'」的標題與內文都會刪除'+(S.intro[i].key==='geo'?'，手繪地圖也會一起移除':'')+'。','刪除'))return;S.intro.splice(i,1);}
+    else return;
+    save('intro');renderIntro();});
+  if($('#introAdd'))$('#introAdd').onclick=()=>{S.intro.push({key:'c'+Date.now(),title:'新章節',en:'',body:''});save('intro');renderIntro();
+    setTimeout(()=>{const el=$('#chap-'+(S.intro.length-1));if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},60);};
+  if($('#introSel'))$('#introSel').onchange=e=>{introFilter=e.target.value;renderIntro();window.scrollTo({top:$('#introView').getBoundingClientRect().top+scrollY-70,behavior:'smooth'});};
 }
 $('#introEditBtn').onclick=()=>{introEdit=!introEdit;if(!introEdit){toast('✓ 內文已儲存');publishLive();}
   $('#introEditBtn').innerHTML=introEdit?'✓ 完成':'✏️ 編輯內文';$('#introEditBtn').className='btn btn-sm owner-only '+(introEdit?'btn-primary':'btn-ghost');renderIntro();};
 
 /* ================= 匯出匯入 ================= */
-function exportData(){const blob=new Blob([JSON.stringify(S)],{type:'application/json'});const a=document.createElement('a');
+function exportData(){const blob=new Blob([JSON.stringify(pickData())],{type:'application/json'});const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download='回佳行程備份_'+S.meta.date+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('已匯出備份檔');}
 $('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
-  Object.keys(DEFAULTS).forEach(k=>{if(d[k]){S[k]=d[k];save(k);}});renderAll();toast('✓ 已匯入備份');publishLive();}catch(err){toast('⚠️ 檔案格式不正確');}};r.readAsText(f);e.target.value='';};
+  normalize(d);DATA_KEYS.forEach(k=>{if(d[k]){S[k]=d[k];save(k);}});setDay(0);ensureCats();renderAll();toast('✓ 已匯入備份');publishLive();}catch(err){toast('⚠️ 檔案格式不正確');}};r.readAsText(f);e.target.value='';};
 
 /* ================= 編輯者模式 ================= */
 function exportShare(){
-  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  const data=pickData();
   const json=JSON.stringify(data).replace(/</g,'\\u003c');
   const marker='/*__DA'+'TA__*/null';
   const html=SRC.replace(marker,json);
@@ -853,17 +1016,22 @@ function exportShare(){
   toast('已下載分享版，傳給同行者即可');
 }
 function setOwner(on){document.body.classList.toggle('owner',on);if(!on&&CLOUD){try{localStorage.removeItem('huijia_cloud_pw');}catch(e){}}try{on?localStorage.setItem(KEY+'owner','1'):localStorage.removeItem(KEY+'owner');}catch(e){}
-  if(!on){if(tripEdit)$('#tripEditBtn').click();if(packManage)$('#packManage').click();if(introEdit)$('#introEditBtn').click();editingSpot=null;renderSpots();}}
+  if(!on){if(tripEdit)$('#tripEditBtn').click();if(packManage)$('#packManage').click();if(introEdit)$('#introEditBtn').click();if(catManage)$('#catManageBtn').click();editingSpot=null;}renderSpots();renderDayTabs();}
 if(!PUB&&!CLOUD){
   try{if(localStorage.getItem(KEY+'owner')==='1')document.body.classList.add('owner');}catch(e){}
   let taps=0,tapT;
   $('.brand').onclick=()=>{if(LIVE)return;taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
     if(taps<5||document.body.classList.contains('owner'))return;taps=0;
     let pin=null;try{pin=localStorage.getItem(KEY+'pin');}catch(e){}
-    if(!pin){const n=prompt('第一次使用：請設定編輯密碼（4 位數以上）');if(!n||n.length<4){toast('未設定密碼');return;}
-      try{localStorage.setItem(KEY+'pin',n);}catch(e){}setOwner(true);toast('🔓 已開啟編輯者模式');return;}
-    const t=prompt('請輸入編輯密碼');if(t===null)return;
-    if(t===pin){setOwner(true);toast('🔓 已開啟編輯者模式');}else toast('密碼錯誤');};
+    $('#pwModal h3').textContent=pin?'編輯者登入':'設定編輯密碼';
+    $('#pwModal p').textContent=pin?'輸入編輯密碼後即可修改內容':'第一次使用，請設定 4 位數以上的密碼';
+    $('#pwInput').value='';$('#pwModal').classList.add('show');setTimeout(()=>$('#pwInput').focus(),50);};
+  $('#pwNo').onclick=()=>$('#pwModal').classList.remove('show');
+  $('#pwInput').onkeydown=e=>{if(e.key==='Enter')$('#pwYes').click();};
+  $('#pwYes').onclick=()=>{const v=$('#pwInput').value;let pin=null;try{pin=localStorage.getItem(KEY+'pin');}catch(e){}
+    if(!pin){if(v.length<4){toast('密碼至少 4 位數');return;}try{localStorage.setItem(KEY+'pin',v);}catch(e){}}
+    else if(v!==pin){toast('密碼錯誤');return;}
+    $('#pwModal').classList.remove('show');setOwner(true);renderAll();toast('🔓 已開啟編輯者模式');};
   $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已鎖定，目前為唯讀畫面');};
 }
 
@@ -876,7 +1044,7 @@ async function publishLive(){
   if(CLOUD)return cloudSave();
   if(!LIVE||!ART||!document.body.classList.contains('owner')||publishing)return;
   publishing=true;toast('☁️ 同步中…');
-  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  const data=pickData();
   const json=JSON.stringify(data).replace(/</g,'\\u003c');
   const html='<!DOCTYPE html>\n<html lang="zh-Hant">\n<head>\n'+HEAD+'<style id="appStyle">'+APP_CSS+'</style>\n</head>\n<body>\n'+APP_BODY+
     '\n<script type="application/json" id="state">'+json+'<\/script>\n<script>'+APP_JS+'<\/script>\n</body>\n</html>';
@@ -911,9 +1079,9 @@ async function api(body){
   return (await fetch(url,opt)).json();
 }
 let cloudVer=null;
-function isBusy(){return tripEdit||packManage||introEdit||editingSpot||dirty||publishing;}
+function isBusy(){return tripEdit||packManage||introEdit||editingSpot||catManage||dirty||publishing;}
 function applyData(d){
-  ['meta','trip','spots','intro'].forEach(k=>{if(d[k])S[k]=d[k];});
+  d=normalize(d);['days','spots','intro','cats'].forEach(k=>{if(d[k])S[k]=d[k];});setDay(curDay);ensureCats();
   if(d.pack){const done=getDone();S.pack=d.pack.map(p=>({...p,done:done.includes(p.id)}));}
   try{localStorage.setItem('huijia_cloud_cache',JSON.stringify(d));}catch(e){}
   renderAll();
@@ -930,7 +1098,7 @@ async function cloudFetch(first){
 async function cloudSave(){
   if(!document.body.classList.contains('owner')||publishing)return;
   publishing=true;toast('☁️ 同步中…');
-  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  const data=pickData();
   try{
     const r=await api({action:'save',pw:getPw(),data});
     if(r.ok){dirty=false;document.body.classList.remove('dirty');cloudVer=r.version||cloudVer;
@@ -954,7 +1122,7 @@ if(CLOUD){
     const pw=$('#pwInput').value;if(!pw)return;$('#pwYes').textContent='驗證中…';
     try{const r=await api({action:'login',pw});
       if(r.ok){try{localStorage.setItem('huijia_cloud_pw',pw);}catch(e){}$('#pwModal').classList.remove('show');
-        document.body.classList.add('owner');toast('🔓 已開啟編輯者模式');}
+        document.body.classList.add('owner');renderAll();toast('🔓 已開啟編輯者模式');}
       else toast('密碼錯誤');
     }catch(e){toast('⚠️ 連不上雲端，請檢查網路');}
     $('#pwYes').textContent='登入';};
@@ -972,7 +1140,39 @@ function switchTab(name){
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 
-function renderAll(){renderMeta();renderTrip();renderPack();renderSpots();renderIntro();}
+/* ================= 站內搜尋 ================= */
+const TABC={'行程':'#606B4C','站點':'#39352F','來「佳」':'#C2A36D','行李':'#963F32'};
+function flash(el){if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+scrollY-80,behavior:'smooth'});el.classList.remove('highlight');void el.offsetWidth;el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),1700);}
+function searchIndex(){
+  const out=[];
+  S.days.forEach((d,di)=>d.trip.forEach((t,i)=>out.push({tab:'行程',title:(S.days.length>1?'第'+(di+1)+'天 ':'')+t.time+' '+t.name,text:[t.name,t.act,t.addr,t.mode].join('　'),
+    go:()=>{switchTab('trip');setDay(di);renderMeta();renderTrip();setTimeout(()=>flash($('#stop-'+i+' .card')),60);}})));
+  S.spots.forEach(s=>out.push({tab:'站點',title:s.name,text:[s.name,s.cat,s.tags,s.intro,s.story,s.addr].join('　'),go:()=>gotoSpot(s.id)}));
+  S.intro.forEach((c,i)=>out.push({tab:'來「佳」',title:c.title,text:c.title+'　'+c.body,go:()=>{switchTab('intro');setTimeout(()=>flash($('#chap-'+i)),60);}}));
+  S.pack.forEach(p=>out.push({tab:'行李',title:p.name,text:[p.cat,p.name,p.note].join('　'),go:()=>{switchTab('pack');setTimeout(()=>flash(document.querySelector('.item[data-id="'+p.id+'"]')),60);}}));
+  return out;
+}
+const reEsc=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function doSearch(){
+  const q=$('#searchInput').value.trim(),box=$('#searchResults');
+  if(!q){box.innerHTML='<div class="s-empty">輸入關鍵字，例如：金唐殿、菜燕、步道、停車</div>';return;}
+  const terms=q.toLowerCase().split(/\s+/).filter(Boolean);
+  const res=searchIndex().filter(r=>{const t=r.text.toLowerCase();return terms.every(x=>t.includes(x));});
+  if(!res.length){box.innerHTML='<div class="s-empty">找不到「'+esc(q)+'」相關的內容</div>';return;}
+  const rx=new RegExp('('+terms.map(t=>reEsc(esc(t))).join('|')+')','gi');
+  box.innerHTML='<div class="s-count">找到 '+res.length+' 筆</div>'+res.map((r,k)=>{
+    const flat=r.text.replace(/\s+/g,' ');const pos=Math.max(0,flat.toLowerCase().indexOf(terms[0]));
+    const st=Math.max(0,pos-22),snip=(st>0?'…':'')+flat.slice(st,pos+60)+(pos+60<flat.length?'…':'');
+    return `<button class="s-item" data-k="${k}"><span class="s-tab" style="background:${TABC[r.tab]}">${r.tab}</span><span class="s-title">${esc(r.title).replace(rx,'<mark>$1</mark>')}</span><div class="s-snip">${esc(snip).replace(rx,'<mark>$1</mark>')}</div></button>`;}).join('');
+  box.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{closeSearch();res[+b.dataset.k].go();});
+}
+function openSearch(){$('#searchPanel').classList.add('show');doSearch();setTimeout(()=>$('#searchInput').focus(),50);}
+function closeSearch(){$('#searchPanel').classList.remove('show');}
+$('#searchBtn').onclick=openSearch;$('#searchClose').onclick=closeSearch;$('#searchInput').oninput=doSearch;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch();
+  if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)){e.preventDefault();openSearch();}});
+
+function renderAll(){renderMeta();renderTrip();renderPack();renderSpots();renderIntro();if(catManage)renderCatPanel();}
 renderAll();
 try{const t=sessionStorage.getItem(KEY+'tab');if(t)switchTab(t);}catch(e){}
 </script>
