@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F3EEE3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>一起回佳｜佳里半日行 2026.11.18</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style id="appStyle">
+:root{
+  --cream:#F3EEE3; --brick:#963F32; --gold:#C2A36D; --char:#39352F;
+  --olive:#606B4C; --sand:#D9CDBB;
+  --brick-d:#7c3228; --olive-l:#e4e6dc; --line:rgba(57,53,47,.12);
+  --nav-h:66px; --safe-b:env(safe-area-inset-bottom,0px);
+  --serif:"Noto Serif TC","Songti TC",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:#e9e2d4;color:var(--char);font-family:var(--sans);font-size:15px;line-height:1.65}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;padding-bottom:calc(var(--nav-h) + var(--safe-b));box-shadow:0 0 40px rgba(57,53,47,.08)}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--char)}
+
+/* ===== Header ===== */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(243,238,227,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 18px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--serif);font-weight:900;color:var(--brick);font-size:20px;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.brand .seal{height:32px;padding:0 14px;border-radius:8px;background:var(--brick);color:var(--cream);display:grid;place-items:center;font-size:16px;letter-spacing:.12em}
+.top-meta{font-size:12px;color:var(--olive);text-align:right;line-height:1.35}
+.top-meta b{color:var(--brick);font-size:13px}
+
+/* ===== Tabs ===== */
+.tab{display:none;animation:fade .35s ease}
+.tab.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.hero{padding:26px 20px 22px;position:relative;overflow:hidden}
+.hero h1{font-family:var(--serif);font-weight:900;margin:0;font-size:28px;letter-spacing:.06em;line-height:1.3}
+.hero p{margin:6px 0 0;font-size:13.5px;opacity:.9}
+.hero .eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;opacity:.75;margin-bottom:4px}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:170px;height:170px;border-radius:50%;border:22px solid rgba(255,255,255,.08)}
+.hero.olive{background:var(--olive);color:var(--cream)}
+.hero.brick{background:var(--brick);color:var(--cream)}
+.hero.char{background:var(--char);color:var(--cream)}
+.hero.cream{background:var(--cream);color:var(--brick);border-bottom:1px solid var(--line)}
+.hero.cream::after{border-color:rgba(194,163,109,.18)}
+
+.section{padding:18px 16px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px 0}
+.btn{border:none;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;transition:transform .1s, background .2s}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:var(--brick);color:var(--cream)}
+.btn-primary:active{background:var(--brick-d)}
+.btn-ghost{background:transparent;color:var(--brick);border:1.5px solid var(--brick)}
+.btn-olive{background:var(--olive);color:var(--cream)}
+.btn-soft{background:var(--sand);color:var(--char)}
+.btn-sm{padding:6px 12px;font-size:13px}
+.btn-block{width:100%;justify-content:center}
+.map-btn{background:var(--brick);color:var(--cream);border:none;border-radius:10px;padding:8px 12px;font-size:13.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.map-btn:active{background:var(--brick-d)}
+.link-btn{background:var(--cream);color:var(--olive);border:1.5px solid var(--olive);border-radius:10px;padding:7px 11px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px}
+
+/* ===== Trip summary ===== */
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.summary div{background:rgba(243,238,227,.14);border-radius:12px;padding:8px 6px;text-align:center}
+.summary b{display:block;font-family:var(--serif);font-size:17px;letter-spacing:.03em}
+.summary span{font-size:11px;opacity:.8}
+.countdown{display:inline-block;margin-top:12px;background:var(--gold);color:var(--char);font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 12px}
+
+/* ===== Timeline ===== */
+.timeline{position:relative;padding:8px 16px 4px 16px}
+.stop{display:grid;grid-template-columns:54px 22px 1fr;gap:8px;position:relative}
+.stop .time{font-family:var(--serif);font-weight:900;color:var(--olive);font-size:16px;text-align:right;padding-top:14px}
+.stop .rail{position:relative}
+.stop .rail::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:2px;background:repeating-linear-gradient(var(--olive) 0 6px,transparent 6px 11px);opacity:.55}
+.stop:first-child .rail::before{top:20px}
+.stop.last .rail::before{bottom:auto;height:20px}
+.stop .dot{position:absolute;left:0;top:14px;width:22px;height:22px;border-radius:50%;background:var(--olive);color:#fff;display:grid;place-items:center;font-size:11px;box-shadow:0 0 0 4px var(--cream)}
+.stop .card{background:#fff;border-radius:16px;padding:12px 14px;margin:6px 0 10px;box-shadow:0 2px 10px rgba(57,53,47,.06);border:1px solid var(--line)}
+.stop .name{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--char);line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}
+.chip{background:var(--olive-l);color:var(--olive);font-size:12.5px;padding:2px 10px;border-radius:999px;font-weight:500}
+.chip.brick{background:#f1e2df;color:var(--brick)}
+.chip.gold{background:#f3ebdc;color:#8a6d36}
+.mode{font-size:12px;color:#fff;background:var(--char);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:2px;font-family:var(--sans);font-weight:500}
+.addr{font-size:12.5px;color:#7a7368;margin:2px 0 10px}
+.stay{font-size:11.5px;color:var(--olive);margin-top:-4px;margin-bottom:6px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.end-mark{display:grid;grid-template-columns:54px 22px 1fr;gap:8px;padding:0 16px 10px}
+.end-mark .time{font-family:var(--serif);font-weight:900;color:var(--brick);font-size:16px;text-align:right}
+.end-mark .flag{width:22px;height:22px;border-radius:50%;background:var(--brick);color:#fff;display:grid;place-items:center;font-size:11px}
+.end-mark .txt{font-weight:700;color:var(--brick);font-family:var(--serif)}
+
+/* ===== Edit forms ===== */
+.edit-card{background:#fff;border:1.5px dashed var(--olive);border-radius:16px;padding:12px;margin:0 16px 12px}
+.edit-card .row{display:flex;gap:8px;margin-bottom:8px}
+.edit-card label{font-size:11.5px;color:var(--olive);font-weight:700;display:block;margin-bottom:2px}
+.field{flex:1;min-width:0}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--sand);background:var(--cream);border-radius:10px;padding:8px 10px;outline:none}
+.field textarea{resize:vertical;min-height:64px;line-height:1.55}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--olive);background:#fff}
+.edit-tools{display:flex;gap:6px;justify-content:flex-end;margin-top:4px}
+.icon-btn{border:none;background:var(--sand);color:var(--char);width:34px;height:34px;border-radius:10px;font-size:15px;display:grid;place-items:center}
+.icon-btn.danger{background:#f1e2df;color:var(--brick)}
+.hint{font-size:12.5px;color:#7a7368;padding:0 16px;margin:10px 0}
+.edit-banner{margin:12px 16px 8px;background:#f3ebdc;border-left:4px solid var(--gold);border-radius:8px;padding:8px 12px;font-size:13px;color:#6b5428}
+
+/* ===== Packing ===== */
+.progress-wrap{position:sticky;top:51px;z-index:10;background:var(--cream);padding:14px 16px 12px;border-bottom:1px solid var(--line)}
+.progress-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.progress-top .label{font-weight:700;font-size:14.5px}
+.progress-top .count{font-family:var(--serif);font-weight:900;font-size:20px;color:var(--olive)}
+.bar{height:12px;background:var(--sand);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--olive),#7c8a5f);border-radius:999px;transition:width .4s cubic-bezier(.3,1.4,.6,1)}
+.done-msg{margin-top:8px;font-size:13px;color:var(--olive);font-weight:700;display:none}
+.done-msg.show{display:block}
+.cat-title{font-family:var(--serif);font-weight:700;color:var(--brick);font-size:15px;margin:16px 16px 6px;display:flex;align-items:center;gap:8px}
+.cat-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.items{padding:0 16px}
+.item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;user-select:none;transition:background .2s,border-color .2s}
+.item .box{width:26px;height:26px;border-radius:8px;border:2px solid var(--sand);display:grid;place-items:center;flex-shrink:0;transition:all .2s;color:transparent;font-weight:900;font-size:15px}
+.item .txt{flex:1;font-size:15px}
+.item .note{font-size:12px;color:#8b8479;display:block;line-height:1.3}
+.item.done{background:#eef0e8;border-color:#cfd5c1}
+.item.done .box{background:#4f8a3c;border-color:#4f8a3c;color:#fff;transform:scale(1.05)}
+.item.done .txt{color:#6f7a5e;text-decoration:line-through;text-decoration-color:rgba(79,138,60,.5)}
+.item .del{display:none}
+.managing .item .del{display:grid}
+.add-row{display:flex;gap:6px;padding:6px 16px 0}
+.add-row input,.add-row select{border:1px solid var(--sand);background:#fff;border-radius:10px;padding:9px 10px;outline:none}
+.add-row input{flex:1;min-width:0}
+
+/* ===== Spots ===== */
+.spot{margin:0 16px 14px;background:#fff;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 3px 14px rgba(57,53,47,.06)}
+.spot-head{display:flex;align-items:center;gap:12px;padding:12px;cursor:pointer;user-select:none}
+.spot-icon{width:56px;height:56px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:24px;color:var(--cream);background-size:cover;background-position:center}
+.spot-head .meta{flex:1;min-width:0}
+.spot-head .ttl{display:inline-block;font-family:var(--serif);font-weight:900;font-size:16.5px;line-height:1.35;padding:4px 12px;border-radius:8px;margin-bottom:4px;letter-spacing:.04em;color:var(--cream)}
+.spot-head{padding:14px 14px 12px}
+.spot-head .sub{font-size:12.5px;color:#7a7368;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spot-head .arrow{width:28px;height:28px;border-radius:50%;background:var(--cream);display:grid;place-items:center;transition:transform .3s;color:var(--brick);font-size:12px}
+.spot.open .arrow{transform:rotate(180deg)}
+.spot-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.spot.open .spot-body{max-height:4000px}
+.spot-inner{padding:0 14px 16px}
+.gallery{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px 12px;padding:0 14px}
+.gallery img{height:180px;max-width:85%;border-radius:12px;object-fit:cover;scroll-snap-align:start;flex-shrink:0}
+.cover-empty{border:1.5px dashed var(--sand);border-radius:12px;margin-bottom:12px;padding:12px;text-align:center;font-size:13px;color:#8b8479;background:var(--cream)}
+.spot-inner p{margin:0 0 10px;white-space:pre-line}
+.story{background:var(--cream);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:0 14px;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;white-space:pre-line;font-size:14.5px}
+.story.show{max-height:2000px;padding:12px 14px;margin-bottom:12px}
+.story h4{margin:0 0 6px;font-family:var(--serif);color:var(--brick)}
+.cat-信仰 .ttl{background:var(--brick)}
+.cat-西拉雅 .ttl{background:var(--olive)}
+.cat-美食 .ttl{background:var(--sand);color:var(--brick)}
+.cat-歷史 .ttl{background:var(--gold);color:var(--char)}
+.cat-其他 .ttl{background:var(--char)}
+.spot.cat-信仰{border-top:4px solid var(--brick)}
+.spot.cat-西拉雅{border-top:4px solid var(--olive)}
+.spot.cat-美食{border-top:4px solid var(--sand)}
+.spot.cat-歷史{border-top:4px solid var(--gold)}
+.spot.cat-其他{border-top:4px solid var(--char)}
+.img-edit{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.img-edit div{position:relative}
+.img-edit img{width:76px;height:76px;object-fit:cover;border-radius:10px}
+.img-edit button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:none;background:var(--brick);color:#fff;font-size:12px;line-height:1}
+.upload{display:inline-flex;align-items:center;gap:6px;background:var(--olive-l);color:var(--olive);border-radius:10px;padding:8px 12px;font-size:13.5px;font-weight:700;cursor:pointer}
+.upload input{display:none}
+.highlight{animation:hl 1.6s ease}
+@keyframes hl{0%,60%{box-shadow:0 0 0 4px var(--gold)}100%{box-shadow:0 3px 14px rgba(57,53,47,.06)}}
+
+/* ===== Intro ===== */
+.quote{margin:0;padding:30px 14px 26px;background:var(--cream);text-align:center;position:relative;border-bottom:1px solid var(--line)}
+.quote .mark{font-family:var(--serif);font-size:64px;color:var(--gold);line-height:.6;display:block;height:30px}
+.quote blockquote{margin:0;font-family:var(--serif);font-weight:700;font-size:clamp(14px,4.4vw,19px);line-height:1.9;color:var(--char);letter-spacing:.02em;white-space:nowrap}
+.quote blockquote em{font-style:normal;color:var(--brick);font-weight:900;font-size:1.25em}
+.quote .by{margin-top:12px;font-size:12px;color:#8a6d36;letter-spacing:.2em}
+.chap{margin:16px 16px 0;background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden}
+.chap-head{display:flex;align-items:center;gap:12px;padding:14px 16px 6px}
+.chap-num{font-family:var(--serif);font-weight:900;font-size:30px;color:var(--gold);line-height:1}
+.chap-head h2{margin:0;font-family:var(--serif);font-weight:900;font-size:19px;color:var(--brick);letter-spacing:.05em}
+.chap-head small{display:block;font-family:var(--sans);font-weight:400;font-size:11px;color:#8a6d36;letter-spacing:.15em}
+.chap-body{padding:4px 16px 16px;white-space:pre-line;font-size:14.8px}
+.chap-body b,.chap-body strong{color:var(--brick)}
+.map-frame{width:100%;height:220px;border:0;border-radius:12px;display:block;margin-top:6px;background:var(--sand)}
+.compass{display:block;margin:4px auto 10px;width:100%;border-radius:14px;box-shadow:0 2px 10px rgba(57,53,47,.08)}
+.foodgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
+.foodgrid div{background:var(--cream);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45}
+.foodgrid b{display:block;font-family:var(--serif);color:var(--brick);font-size:15px;margin-bottom:2px}
+
+.footer{background:var(--char);color:var(--cream);text-align:center;padding:22px 16px 24px;margin-top:26px;font-size:12px;line-height:1.8}
+.footer b{font-family:var(--serif);font-size:16px;letter-spacing:.2em;color:var(--gold)}
+
+/* ===== Bottom nav ===== */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:#fffdf8;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:30;box-shadow:0 -4px 18px rgba(57,53,47,.06)}
+.nav button{background:none;border:none;color:#9a9286;font-size:11.5px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative}
+.nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button.active{color:var(--brick)}
+.nav button.active::before{content:"";position:absolute;top:0;width:34px;height:3px;border-radius:0 0 4px 4px;background:var(--brick)}
+.nav .badge{position:absolute;top:8px;right:calc(50% - 22px);background:var(--olive);color:#fff;font-size:9.5px;border-radius:999px;padding:0 5px;line-height:15px}
+
+/* ===== Splash & modal ===== */
+.splash{position:fixed;inset:0;z-index:100;background:var(--brick);color:var(--cream);display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .5s, visibility .5s}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-card{max-width:360px;width:100%;text-align:center;position:relative}
+.splash .seal-big{width:92px;height:92px;margin:0 auto 22px;border:3px solid var(--gold);border-radius:18px;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:46px;color:var(--gold);transform:rotate(-4deg)}
+.splash h1{font-family:var(--serif);font-weight:900;font-size:27px;line-height:1.55;letter-spacing:.12em;margin:0 0 14px}
+.splash h1 span{color:var(--gold)}
+.splash .info{font-size:13.5px;opacity:.88;margin-bottom:6px;letter-spacing:.05em}
+.splash .rule{width:60px;height:2px;background:var(--gold);margin:20px auto}
+.splash button{background:var(--cream);color:var(--brick);border:none;border-radius:999px;padding:14px 44px;font-size:16px;font-weight:900;letter-spacing:.15em;font-family:var(--serif);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.splash button:active{transform:scale(.96)}
+.splash .deco{position:absolute;inset:0;pointer-events:none;opacity:.12;background:radial-gradient(circle at 15% 20%,var(--gold) 0 2px,transparent 3px) 0 0/34px 34px}
+
+.modal{position:fixed;inset:0;z-index:90;background:rgba(57,53,47,.55);display:none;align-items:center;justify-content:center;padding:24px}
+.modal.show{display:flex}
+.modal-card{background:var(--cream);border-radius:20px;padding:22px 20px 18px;max-width:330px;width:100%;text-align:center;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+.modal-card h3{margin:0 0 6px;font-family:var(--serif);color:var(--brick)}
+.modal-card p{margin:0 0 18px;font-size:14px;color:#5e584e}
+.modal-card .btns{display:flex;gap:10px}
+.modal-card .btns .btn{flex:1;justify-content:center}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 14px);transform:translateX(-50%) translateY(20px);background:var(--char);color:var(--cream);padding:9px 18px;border-radius:999px;font-size:13.5px;opacity:0;transition:all .3s;z-index:95;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.settings{margin:18px 16px 0;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+.settings h4{margin:0 0 8px;font-family:var(--serif);color:var(--char)}
+.settings .actions{gap:6px}
+body:not(.owner) .owner-only{display:none!important}
+body.live .local-only{display:none!important}
+.sync-btn{display:none}
+body.dirty .sync-btn{display:inline-block}
+body.cloud .no-cloud{display:none!important}
+.pw-input{width:100%;border:1px solid var(--sand);background:#fff;border-radius:10px;padding:10px 12px;font-size:16px;margin-bottom:14px;outline:none;text-align:center;letter-spacing:.2em}
+.owner-bar{display:none;align-items:center;justify-content:space-between;gap:8px;background:var(--char);color:var(--cream);font-size:12.5px;padding:7px 16px}
+body.owner .owner-bar{display:flex}
+.owner-bar button{background:var(--gold);color:var(--char);border:none;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ========== Splash ========== -->
+<div class="splash" id="splash">
+  <div class="deco"></div>
+  <div class="splash-card">
+    <div class="seal-big">佳</div>
+    <h1>準備好所有行李<br>一起<span>回佳</span></h1>
+    <div class="info" id="splashInfo">2026.11.18（三）10:30–14:30</div>
+    <div class="info">臺南市佳里區</div>
+    <div class="rule"></div>
+    <button id="agreeBtn">同意，出發！</button>
+  </div>
+</div>
+
+<!-- ========== Header ========== -->
+<div class="owner-bar"><span id="ownerText">🔓 編輯者模式（只有你看得到）</span><span><button class="sync-btn" id="syncBtn">☁️ 立即同步</button> <button id="lockBtn" class="local-only">🔒 鎖定</button></span></div>
+<header class="topbar">
+  <div class="brand"><span class="seal">歡迎來「佳」</span></div>
+  <div class="top-meta"><b id="topDate">11/18（三）</b><br><span id="topTime">10:30–14:30</span></div>
+</header>
+
+<!-- ========== 行程 ========== -->
+<section class="tab active" id="tab-trip">
+  <div class="hero olive">
+    <h1>佳里行程</h1>
+    <p>老街小吃・百年廟宇・西拉雅文化・糖廠冰品</p>
+    <div class="summary" style="grid-template-columns:repeat(2,1fr)">
+      <div><b id="sumDate">11/18</b><span>導覽日期</span></div>
+      <div><b id="sumTime">10:30</b><span id="sumTimeSub">至 14:30</span></div>
+    </div>
+    <div class="countdown" id="countdown"></div>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-ghost btn-sm owner-only" id="tripEditBtn">✏️ 編輯行程</button>
+  </div>
+  <div id="tripView"></div>
+</section>
+
+<!-- ========== 行李 ========== -->
+<section class="tab" id="tab-pack">
+  <div class="hero brick">
+    <h1>行李清單</h1>
+    <p>點一下就打勾，關掉網頁也會記住</p>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-top"><span class="label">完成進度</span><span class="count" id="packCount">0/0</span></div>
+    <div class="bar"><i id="packBar"></i></div>
+    <div class="done-msg" id="packDone">🎉 行李全部到齊，準備回佳！</div>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-primary btn-sm" id="packClear">↺ 一鍵清空</button>
+    <button class="btn btn-ghost btn-sm owner-only" id="packManage">⚙︎ 管理項目</button>
+  </div>
+  <div id="packList"></div>
+  <div id="packAdd" style="display:none">
+    <div class="cat-title">新增項目</div>
+    <div class="add-row">
+      <select id="packCat"></select>
+      <input id="packInput" placeholder="輸入物品名稱">
+      <button class="btn btn-olive btn-sm" id="packAddBtn">＋</button>
+    </div>
+    <div class="add-row" id="packNewCatRow" style="display:none"><input id="packNewCat" placeholder="新分類名稱"></div>
+  </div>
+</section>
+
+<!-- ========== 站點 ========== -->
+<section class="tab" id="tab-spot">
+  <div class="hero char">
+    <h1>站點介紹</h1>
+    <p>點卡片展開，讀讀每一站的歷史小故事</p>
+  </div>
+  <div class="toolbar" style="padding-bottom:14px">
+    <button class="btn btn-ghost btn-sm" id="spotExpandAll">⇅ 全部展開</button>
+    <button class="btn btn-ghost btn-sm owner-only" id="spotAdd">＋ 新增站點</button>
+  </div>
+  <div id="spotList"></div>
+</section>
+
+<!-- ========== 來佳 ========== -->
+<section class="tab" id="tab-intro">
+  <div class="quote">
+    <span class="mark">“</span>
+    <blockquote>當別人問起「你住哪裡？」總會被白眼，<br>因為我住<em>佳里</em>。</blockquote>
+    <div class="by">— 來「佳」・認識佳里 —</div>
+  </div>
+  <div class="toolbar">
+    <button class="btn btn-ghost btn-sm owner-only" id="introEditBtn">✏️ 編輯內文</button>
+  </div>
+  <div id="introView"></div>
+</section>
+
+
+<!-- ========== Nav ========== -->
+<nav class="nav">
+  <button data-tab="trip" class="active">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>行程</button>
+  <button data-tab="pack">
+    <svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M4 12h16"/></svg>行李<span class="badge" id="packBadge"></span></button>
+  <button data-tab="spot">
+    <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>站點</button>
+  <button data-tab="intro">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 4l9 6.5M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>來「佳」</button>
+</nav>
+
+<div class="modal" id="modal"><div class="modal-card">
+  <h3 id="modalTitle">確定嗎？</h3><p id="modalText"></p>
+  <div class="btns"><button class="btn btn-soft" id="modalNo">取消</button><button class="btn btn-primary" id="modalYes">確定</button></div>
+</div></div>
+<div class="modal" id="pwModal"><div class="modal-card">
+  <h3>編輯者登入</h3><p>輸入編輯密碼後即可修改內容</p>
+  <input type="password" class="pw-input" id="pwInput" autocomplete="current-password" placeholder="密碼">
+  <div class="btns"><button class="btn btn-soft" id="pwNo">取消</button><button class="btn btn-primary" id="pwYes">登入</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept="application/json" style="display:none">
+</div>
+
+<script type="application/json" id="state">null</script>
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbygfbFELKmos7ukvatFGgGrFT7290AakrNds34i-tOSCUNmjn1Ghuu8xSn1DiRhi7ZF/exec';
+const CLOUD = !!API_URL;
+
+/* ================= 預設資料 ================= */
+const DEFAULTS = {
+  meta:{date:'2026-11-18',start:'10:30',end:'14:30',people:6},
+  trip:[
+    {time:'10:30',name:'忠孝停車場',mode:'開車',act:'停車',addr:'722臺南市佳里區東寧里進學路213號',spot:''},
+    {time:'10:40',name:'振興肉脯舖',mode:'步行',act:'買點心',addr:'722臺南市佳里區東寧里中山路343號',spot:'zhenxing'},
+    {time:'10:45',name:'金唐殿',mode:'步行',act:'佳里區信仰中心',addr:'722臺南市佳里區建南里中山路289號',spot:'jintang'},
+    {time:'11:15',name:'佳里中山公有零售市場',mode:'步行',act:'老街、米苔目、菜燕、菜炸、豆腐店、南北貨、揪咖哩',addr:'722臺南市佳里區東寧里中山路318號',spot:'market'},
+    {time:'11:45',name:'自分咖啡',mode:'步行',act:'喝咖啡',addr:'722臺南市佳里區東寧里和平街146號',spot:'jibun'},
+    {time:'12:30',name:'忠孝停車場',mode:'步行',act:'開車',addr:'722臺南市佳里區東寧里進學路213號',spot:''},
+    {time:'12:40',name:'廣安宮',mode:'開車',act:'拜拜',addr:'臺南市佳里區建南里新生路441巷94號',spot:'guangan'},
+    {time:'13:00',name:'北頭洋',mode:'開車',act:'步道',addr:'722臺南市佳里區海澄里佳青路一段162號',spot:'beitouyang'},
+    {time:'13:30',name:'佳里糖廠',mode:'開車',act:'吃冰',addr:'722臺南市佳里區六安里六安130號',spot:'sugar'}
+  ],
+  pack:[
+    ['證件與錢','健保卡'],['證件與錢','現金與零錢','市場小吃多半只收現金'],
+    ['隨身物品','手機'],['隨身物品','行動電源與充電線'],['隨身物品','水壺'],['隨身物品','環保餐具'],['隨身物品','衛生紙、濕紙巾'],
+    ['天候與健康','帽子或陽傘'],['天候與健康','防曬乳'],['天候與健康','薄外套','11月早晚溫差'],['天候與健康','輕便雨具'],['天候與健康','常備藥品'],['天候與健康','好走的鞋','步行＋步道'],
+    ['開車與其他','車鑰匙、駕照'],['開車與其他','行車前安全檢查','胎壓、油量、燈號、雨刷'],['開車與其他','保冷袋','菜燕、肉脯帶回家'],['開車與其他','拜拜香油錢']
+  ].map((a,i)=>({id:'p'+i,cat:a[0],name:a[1],note:a[2]||'',done:false})),
+  spots:[
+    {id:'zhenxing',name:'振興肉脯舖',cat:'美食',icon:'脯',addr:'722臺南市佳里區東寧里中山路343號',
+     intro:'中山路上的肉脯老店，是走進佳里老街區的第一站。先買一包當作沿路的點心，也很適合帶回家當伴手禮。\n（可在編輯模式補充店家介紹與照片）',
+     tags:'肉脯、肉鬆、伴手禮',
+     story:'肉脯、肉鬆是臺灣傳統的手工肉品，以豬肉長時間翻炒、烘焙收乾而成，過去是方便保存、配粥配飯的家常好味道。\n（店家的歷史故事請在編輯模式補充）',imgs:[]},
+    {id:'jintang',name:'金唐殿',cat:'信仰',icon:'殿',addr:'722臺南市佳里區建南里中山路289號',
+     intro:'佳里的信仰中心，主祀朱、雷、殷三府千歲，地方上習慣稱為「三千歲」。廟宇為市定古蹟，屋脊與牆面上的剪黏裝飾是參觀重點。',
+     tags:'三府千歲、剪黏、蕭壠香、市定古蹟',
+     story:'日治時期金唐殿重修時，延請來自廣東的剪黏名匠何金龍主持裝飾。他以碎瓷片拼出人物、花鳥與戲齣，色彩鮮豔、人物生動，至今仍是臺灣剪黏藝術的代表作之一，抬頭看屋脊就能找到。\n\n金唐殿三年一科的「蕭壠香」，是臺南北部重要的香科（刈香）祭典之一。舉行時，蜈蚣陣、宋江陣等陣頭繞境庄頭，整個佳里都熱鬧起來。',imgs:[]},
+    {id:'market',name:'佳里中山公有零售市場',cat:'美食',icon:'市',addr:'722臺南市佳里區東寧里中山路318號',
+     intro:'佳里人的大廚房。市場與周邊老街藏著許多老味道，跟著在地人一攤一攤吃過去。',
+     tags:'老街、米苔目、菜燕、菜炸、豆腐店、南北貨、揪咖哩',
+     story:'【菜燕】以石花菜熬煮後放涼凝固，切塊加糖水，是鹽分地帶夏天消暑的古早涼品。\n【米苔目】用米漿製成的粗短米條，甜湯、鹹湯都好吃。\n【菜炸】把蔬菜絲裹上粉漿下鍋油炸，是臺南沿海常見的庶民小吃。\n【南北貨】乾貨、香料、拜拜用品一應俱全，老店的木櫃與秤子很有看頭。\n（各攤店家故事可在編輯模式補充）',imgs:[]},
+    {id:'jibun',name:'自分咖啡',cat:'其他',icon:'啡',addr:'722臺南市佳里區東寧里和平街146號',
+     intro:'逛完市場後找個地方坐下來，喝杯咖啡歇歇腳，聊聊剛剛吃到的好味道。\n（可在編輯模式補充店家介紹與照片）',
+     tags:'咖啡、休息',
+     story:'（店家故事請在編輯模式補充）',imgs:[]},
+    {id:'guangan',name:'廣安宮',cat:'信仰',icon:'宮',addr:'臺南市佳里區建南里新生路441巷94號',
+     intro:'行程中的拜拜站。\n（主祀神明與廟宇介紹請在編輯模式補充）',
+     tags:'拜拜',
+     story:'（廟宇沿革與小故事請在編輯模式補充）',imgs:[]},
+    {id:'beitouyang',name:'北頭洋',cat:'西拉雅',icon:'洋',addr:'722臺南市佳里區海澄里佳青路一段162號',
+     intro:'西拉雅族蕭壠社後裔居住的聚落之一。聚落裡的立長宮是供奉阿立祖的公廨，周邊有平埔文化步道與風車地景，可以散步認識西拉雅文化。',
+     tags:'西拉雅、公廨、阿立祖、步道',
+     story:'西拉雅族的祖靈信仰稱為「阿立祖」。他們以盛水的壺或甕作為祖靈的象徵，學者稱之為「祀壺信仰」，供奉的地方叫做「公廨」。\n\n佳里的舊名「蕭壠」，就是來自西拉雅族的蕭壠社。漢人移入後，部分族人遷往北頭洋一帶，一直守著祖先的信仰。走一趟步道，就是回到佳里最早的名字。',imgs:[]},
+    {id:'sugar',name:'佳里糖廠（蕭壠文化園區）',cat:'歷史',icon:'糖',addr:'722臺南市佳里區六安里六安130號',
+     intro:'百年糖廠改建的文化園區，保留了倉庫群、鐵道與製糖設施，現在是展覽與藝文空間。來這裡一定要吃一支糖廠冰。',
+     tags:'糖業、倉庫群、糖廠冰',
+     story:'1906 年日本明治製糖株式會社在這裡設立「蕭壠製糖所」，佳里從此與甘蔗、五分車與製糖煙囪緊緊相連。戰後由台糖接手為佳里糖廠，停止製糖後，舊倉庫群改造為「蕭壠文化園區」，讓老糖廠以藝術的方式繼續活著。\n\n夏天排隊吃冰、冬天也想來一支——糖廠冰是很多佳里人的童年味道。',imgs:[]}
+  ],
+  intro:[
+    {key:'geo',title:'地理位置',en:'Location',
+     body:'佳里位於臺南市西北部、曾文溪以北的嘉南平原上，屬於臺南沿海的「鹽分地帶」。\n\n東鄰麻豆、南接西港、西連七股與將軍、北界學甲。北有將軍溪、急水溪，南有曾文溪，三條溪流由東向西注入臺灣海峽，佳里正是溪北地區的交通與生活重心之一。'},
+    {key:'origin',title:'佳里的起源與名稱',en:'Origin',
+     body:'佳里最早是西拉雅族「蕭壠社」的居地，蕭壠社是西拉雅四大社之一，荷蘭時期的文獻已有記載。\n\n清代此地沿用「蕭壠」為名。1920 年日治地方改制時，取鄰近舊地名「佳里興」中的「佳里」二字，成為今天的名字。所以老一輩的人提起金唐殿的香科，還是叫它「蕭壠香」。'},
+    {key:'faith',title:'文化與信仰',en:'Faith & Culture',
+     body:'佳里的信仰有兩條線交織在一起。\n\n一條是漢人的王爺信仰：金唐殿是地方信仰中心，三年一科的蕭壠香，陣頭繞境、全庄動員。\n\n另一條是西拉雅族的阿立祖信仰：北頭洋等聚落的公廨裡，以壺甕祭祀祖靈，延續了數百年。廟宇與公廨並存，正是佳里文化的底色。'},
+    {key:'lit',title:'人文・鹽分地帶文學',en:'Literature',
+     body:'日治時期，佳里出了一群用文字書寫故鄉的人。醫師作家吳新榮在佳里行醫，與郭水潭、徐清吉、王登山等人組成「佳里青風會」，後來成立「臺灣文藝聯盟佳里支部」。\n\n他們的作品充滿海風、鹽田與農村生活，被稱為「鹽分地帶文學」，在臺灣新文學史上占有一席之地。鹽分地帶文藝營延續至今，讓這片土地的文學香火不斷。'},
+    {key:'food',title:'佳里美食與農特產品',en:'Food & Produce',
+     body:'佳里的好味道多藏在市場與老街裡：一包肉脯、一碗米苔目、一塊冰涼的菜燕、一份剛起鍋的菜炸，最後用一支糖廠冰收尾。\n\n早年大片的甘蔗田撐起了製糖產業；今日溪北平原依然種植稻米、蔬菜與瓜果，四季都有在地的收成。\n（農特產品可在編輯模式補充）'}
+  ]
+};
+
+/* ================= 儲存 ================= */
+const SRC='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+const APP_JS=document.currentScript?document.currentScript.textContent:'';
+const APP_CSS=document.getElementById('appStyle').textContent;
+const APP_BODY=document.querySelector('.app').outerHTML;
+let EMB=null;try{EMB=JSON.parse(document.getElementById('state').textContent);}catch(e){}
+const PUBLISHED=/*__DATA__*/null;   // 分享版會把資料寫在這裡，並停用編輯
+let CACHE=null;if(CLOUD){try{CACHE=JSON.parse(localStorage.getItem('huijia_cloud_cache')||'null');}catch(e){}}
+const PUB=PUBLISHED||EMB||(CLOUD?(CACHE||JSON.parse(JSON.stringify(DEFAULTS))):null);
+let LIVE=false,ART=null,ASSETS=null;
+const KEY=PUB?'huijia_pub_':'huijia_v2_';
+const clone=o=>JSON.parse(JSON.stringify(o));
+function getDone(){try{return JSON.parse(localStorage.getItem(KEY+'done')||'[]');}catch(e){return [];}}
+function load(k){
+  if(PUB){if(k==='pack'){const d=getDone();return PUB.pack.map(p=>({...p,done:d.includes(p.id)}));}return clone(PUB[k]);}
+  try{const v=localStorage.getItem(KEY+k);return v?JSON.parse(v):clone(DEFAULTS[k]);}catch(e){return clone(DEFAULTS[k]);}}
+function save(k){
+  if(k!=='pack')markDirty();
+  if(PUB){if(k==='pack'){try{localStorage.setItem(KEY+'done',JSON.stringify(S.pack.filter(p=>p.done).map(p=>p.id)));}catch(e){}}return true;}
+  try{localStorage.setItem(KEY+k,JSON.stringify(S[k]));return true;}catch(e){toast('⚠️ 儲存空間不足，請減少照片');return false;}}
+const S={meta:load('meta'),trip:load('trip'),pack:load('pack'),spots:load('spots'),intro:load('intro')};
+
+/* ================= 工具 ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const WEEK='日一二三四五六';
+function mapUrl(addr,mode){return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(addr)+'&travelmode='+(mode==='步行'?'walking':'driving');}
+function toMin(t){const [h,m]=(t||'0:0').split(':').map(Number);return h*60+m;}
+function splitTags(s){return String(s||'').split(/[、,，\n]/).map(x=>x.trim()).filter(Boolean);}
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1800);}
+function confirmBox(title,text,yesText){return new Promise(r=>{$('#modalTitle').textContent=title;$('#modalText').textContent=text;$('#modalYes').textContent=yesText||'確定';const m=$('#modal');m.classList.add('show');
+  const done=v=>{m.classList.remove('show');$('#modalYes').onclick=$('#modalNo').onclick=null;r(v);};$('#modalYes').onclick=()=>done(true);$('#modalNo').onclick=()=>done(false);});}
+
+/* ================= Splash ================= */
+$('#agreeBtn').onclick=()=>{$('#splash').classList.add('hide');try{sessionStorage.setItem('huijia_agreed','1');}catch(e){}};
+try{if(sessionStorage.getItem('huijia_agreed')==='1')$('#splash').classList.add('hide');}catch(e){}
+
+/* ================= Meta ================= */
+function renderMeta(){
+  const m=S.meta,d=new Date(m.date+'T00:00:00');
+  const md=(d.getMonth()+1)+'/'+d.getDate(),wk='（'+WEEK[d.getDay()]+'）';
+  $('#topDate').textContent=md+wk;$('#topTime').textContent=m.start+'–'+m.end;
+  $('#sumDate').textContent=md;$('#sumTime').textContent=m.start;$('#sumTimeSub').textContent='至 '+m.end;
+  $('#splashInfo').textContent=d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0')+wk+m.start+'–'+m.end;
+  const today=new Date();today.setHours(0,0,0,0);const diff=Math.round((d-today)/864e5);
+  $('#countdown').textContent=diff>0?'距離出發還有 '+diff+' 天':diff===0?'就是今天！一起回佳 🚗':'旅程已完成，謝謝一起回佳';
+}
+
+/* ================= 行程 ================= */
+let tripEdit=false;
+function spotOptions(sel){return '<option value="">（不連結）</option>'+S.spots.map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${esc(s.name)}</option>`).join('');}
+function renderTrip(){
+  const v=$('#tripView');
+  if(tripEdit){
+    const m=S.meta;
+    let h=`<div class="edit-banner">編輯模式：修改後自動儲存，按「完成」會依時間重新排序。</div>
+    <div class="edit-card" style="border-color:var(--gold)"><div class="row">
+      <div class="field"><label>導覽日期</label><input type="date" data-meta="date" value="${m.date}"></div>
+      </div>
+      <div class="row" style="margin:0"><div class="field"><label>開始</label><input type="time" data-meta="start" value="${m.start}"></div>
+      <div class="field"><label>結束</label><input type="time" data-meta="end" value="${m.end}"></div></div></div>`;
+    S.trip.forEach((t,i)=>{h+=`<div class="edit-card" data-i="${i}">
+      <div class="row"><div class="field" style="flex:.7"><label>時間</label><input type="time" data-f="time" value="${esc(t.time)}"></div>
+      <div class="field"><label>行程站點</label><input data-f="name" value="${esc(t.name)}"></div></div>
+      <div class="row"><div class="field" style="flex:.7"><label>前往方式</label><select data-f="mode"><option ${t.mode==='開車'?'selected':''}>開車</option><option ${t.mode==='步行'?'selected':''}>步行</option></select></div>
+      <div class="field"><label>連結站點介紹</label><select data-f="spot">${spotOptions(t.spot)}</select></div></div>
+      <div class="field" style="margin-bottom:8px"><label>活動（用「、」分隔）</label><textarea data-f="act" rows="2">${esc(t.act)}</textarea></div>
+      <div class="field"><label>地址</label><input data-f="addr" value="${esc(t.addr)}"></div>
+      <div class="edit-tools"><button class="icon-btn" data-act="up">↑</button><button class="icon-btn" data-act="down">↓</button><button class="icon-btn danger" data-act="del">🗑</button></div></div>`;});
+    h+=`<div style="padding:0 16px"><button class="btn btn-olive btn-block" id="tripAddRow">＋ 新增一站</button></div>
+    <div class="settings"><h4>資料備份</h4><p class="hint" style="padding:0;margin:0 0 10px">資料存在這支手機的瀏覽器裡。換手機或分享給同行者前，可先匯出備份檔。</p>
+    <div class="actions local-only no-cloud" style="margin-bottom:8px"><button class="btn btn-primary btn-sm" id="shareBtn">📤 下載分享版（同行者用・不可編輯）</button></div>
+    <div class="actions"><button class="btn btn-soft btn-sm local-only" id="exportBtn">⬇ 匯出備份</button><button class="btn btn-soft btn-sm" id="importBtn">⬆ 匯入備份</button><button class="btn btn-ghost btn-sm" id="resetBtn">↺ 還原預設</button></div></div>`;
+    v.innerHTML=h;bindTripEdit();return;
+  }
+  let h='<div class="timeline">';
+  S.trip.forEach((t,i)=>{
+    const next=S.trip[i+1],endT=next?next.time:S.meta.end;const stay=toMin(endT)-toMin(t.time);
+    const acts=splitTags(t.act).map(a=>`<span class="chip">${esc(a)}</span>`).join('');
+    const sp=S.spots.find(s=>s.id===t.spot);
+    h+=`<div class="stop ${i===S.trip.length-1?'':''}">
+      <div class="time">${esc(t.time)}</div>
+      <div class="rail"><div class="dot">${t.mode==='開車'?'🚗':'🚶'}</div></div>
+      <div class="card">
+        <div class="name">${esc(t.name)}<span class="mode">${t.mode==='開車'?'開車前往':'步行前往'}</span></div>
+        <div class="chips">${acts}</div>
+        ${stay>0?`<div class="stay">⏱ 約 ${stay} 分鐘</div>`:''}
+        <div class="addr">${esc(t.addr)}</div>
+        <div class="actions">
+          <a class="map-btn" href="${mapUrl(t.addr,t.mode)}" target="_blank" rel="noopener">📍 Google Map</a>
+          ${sp?`<button class="link-btn" data-goto="${sp.id}">📜 站點介紹</button>`:''}
+        </div>
+      </div></div>`;});
+  h+='</div>';
+  h+=`<div class="end-mark"><div class="time">${esc(S.meta.end)}</div><div><div class="flag">🏁</div></div><div class="txt">行程結束・平安賦歸</div></div>`;
+  v.innerHTML=h;
+  v.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>gotoSpot(b.dataset.goto));
+}
+function bindTripEdit(){
+  const v=$('#tripView');
+  v.querySelectorAll('[data-meta]').forEach(inp=>inp.oninput=()=>{const k=inp.dataset.meta;S.meta[k]=k==='people'?Math.max(1,+inp.value||1):inp.value;save('meta');renderMeta();});
+  v.querySelectorAll('.edit-card[data-i]').forEach(card=>{
+    const i=+card.dataset.i;
+    card.querySelectorAll('[data-f]').forEach(inp=>{inp.oninput=inp.onchange=()=>{S.trip[i][inp.dataset.f]=inp.value;save('trip');};});
+    card.querySelectorAll('[data-act]').forEach(b=>b.onclick=async()=>{
+      const a=b.dataset.act;
+      if(a==='up'&&i>0){[S.trip[i-1],S.trip[i]]=[S.trip[i],S.trip[i-1]];}
+      else if(a==='down'&&i<S.trip.length-1){[S.trip[i+1],S.trip[i]]=[S.trip[i],S.trip[i+1]];}
+      else if(a==='del'){if(!await confirmBox('刪除這一站？','「'+(S.trip[i].name||'未命名')+'」將從行程移除。','刪除'))return;S.trip.splice(i,1);}
+      save('trip');renderTrip();});
+  });
+  $('#tripAddRow').onclick=()=>{const last=S.trip[S.trip.length-1];S.trip.push({time:last?last.time:S.meta.start,name:'新站點',mode:'開車',act:'',addr:'',spot:''});save('trip');renderTrip();setTimeout(()=>v.querySelector('.edit-card[data-i]:last-of-type')?.scrollIntoView({behavior:'smooth',block:'center'}),50);};
+  $('#exportBtn').onclick=exportData;$('#shareBtn').onclick=exportShare;$('#importBtn').onclick=()=>$('#importFile').click();
+  $('#resetBtn').onclick=async()=>{if(!await confirmBox('還原預設資料？','行程、行李、站點與介紹都會回到最初版本，上傳的照片也會清除。','還原'))return;
+    Object.keys(DEFAULTS).forEach(k=>{S[k]=clone(DEFAULTS[k]);save(k);});renderAll();toast('已還原預設');publishLive();};
+}
+$('#tripEditBtn').onclick=()=>{
+  tripEdit=!tripEdit;
+  if(!tripEdit){S.trip.sort((a,b)=>toMin(a.time)-toMin(b.time));save('trip');toast('✓ 行程已儲存');publishLive();}
+  $('#tripEditBtn').innerHTML=tripEdit?'✓ 完成':'✏️ 編輯行程';
+  $('#tripEditBtn').className='btn btn-sm owner-only '+(tripEdit?'btn-primary':'btn-ghost');
+  renderTrip();
+};
+
+/* ================= 行李 ================= */
+let packManage=false;
+function renderPack(){
+  const cats=[...new Set(S.pack.map(p=>p.cat))];
+  let h='';
+  cats.forEach(c=>{h+=`<div class="cat-title">${esc(c)}</div><div class="items">`;
+    S.pack.filter(p=>p.cat===c).forEach(p=>{h+=`<div class="item ${p.done?'done':''}" data-id="${p.id}">
+      <span class="box">✓</span><span class="txt">${esc(p.name)}${p.note?`<span class="note">${esc(p.note)}</span>`:''}</span>
+      <button class="icon-btn danger del" data-del="${p.id}">✕</button></div>`;});
+    h+='</div>';});
+  if(!S.pack.length)h='<p class="hint" style="margin-top:20px">清單是空的，按「管理項目」新增吧！</p>';
+  const list=$('#packList');list.innerHTML=h;list.classList.toggle('managing',packManage);
+  list.querySelectorAll('.item').forEach(el=>el.onclick=e=>{
+    if(e.target.closest('[data-del]'))return;
+    const p=S.pack.find(x=>x.id===el.dataset.id);p.done=!p.done;el.classList.toggle('done',p.done);save('pack');updateProgress();
+    if(navigator.vibrate)navigator.vibrate(12);});
+  list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{S.pack=S.pack.filter(x=>x.id!==b.dataset.del);save('pack');markDirty();renderPack();});
+  $('#packCat').innerHTML=[...cats,'＋ 新分類'].map(c=>`<option>${esc(c)}</option>`).join('');
+  updateProgress();
+}
+function updateProgress(){
+  const n=S.pack.length,d=S.pack.filter(p=>p.done).length;
+  $('#packCount').textContent=d+'/'+n;$('#packBar').style.width=(n?d/n*100:0)+'%';
+  $('#packDone').classList.toggle('show',n>0&&d===n);
+  $('#packBadge').textContent=n?d+'/'+n:'';$('#packBadge').style.display=n&&d<n?'':'none';
+}
+$('#packClear').onclick=async()=>{
+  if(!S.pack.some(p=>p.done)){toast('目前沒有勾選的項目');return;}
+  if(!await confirmBox('一鍵清空勾選？','所有已勾選的項目都會取消，項目本身不會被刪除。','清空'))return;
+  S.pack.forEach(p=>p.done=false);save('pack');renderPack();toast('已清空所有勾選');};
+$('#packManage').onclick=()=>{packManage=!packManage;if(!packManage)publishLive();$('#packAdd').style.display=packManage?'':'none';
+  $('#packManage').innerHTML=packManage?'✓ 完成':'⚙︎ 管理項目';$('#packManage').className='btn btn-sm owner-only '+(packManage?'btn-olive':'btn-ghost');renderPack();};
+$('#packAddBtn').onclick=()=>{
+  const name=$('#packInput').value.trim();if(!name){$('#packInput').focus();return;}
+  let cat=$('#packCat').value;if(cat==='＋ 新分類'){cat=($('#packNewCat').value||'').trim()||'其他';$('#packNewCat').value='';}
+  S.pack.push({id:'p'+Date.now(),cat,name,note:'',done:false});save('pack');markDirty();$('#packInput').value='';renderPack();toast('已新增：'+name);};
+$('#packCat').onchange=()=>{$('#packNewCatRow').style.display=$('#packCat').value==='＋ 新分類'?'':'none';};
+$('#packInput').onkeydown=e=>{if(e.key==='Enter')$('#packAddBtn').click();};
+
+/* ================= 站點 ================= */
+const openSpots=new Set(),openStory=new Set();let editingSpot=null;
+const CATS=['信仰','西拉雅','美食','歷史','其他'];
+function renderSpots(){
+  let h='';
+  S.spots.forEach(s=>{
+    const open=openSpots.has(s.id),cover=s.imgs&&s.imgs[0];
+    const t=S.trip.find(x=>x.spot===s.id);const mode=t?t.mode:'開車';
+    h+=`<div class="spot cat-${esc(s.cat)} ${open?'open':''}" id="spot-${s.id}">
+      <div class="spot-head" data-toggle="${s.id}">
+        <div class="meta"><div class="ttl">${esc(s.name)}</div><div class="sub">${t?'⏰ '+esc(t.time)+'・':''}${esc(s.cat)}・${esc(splitTags(s.tags).slice(0,3).join('・'))}</div></div>
+        <div class="arrow">▼</div></div>
+      <div class="spot-body"><div class="spot-inner">`;
+    if(editingSpot===s.id){
+      h+=`<div class="edit-card" style="margin:0 0 4px">
+        <div class="row"><div class="field"><label>站點名稱</label><input data-sf="name" value="${esc(s.name)}"></div>
+</div>
+        <div class="row"><div class="field"><label>分類（決定配色）</label><select data-sf="cat">${CATS.map(c=>`<option ${c===s.cat?'selected':''}>${c}</option>`).join('')}</select></div></div>
+        <div class="field" style="margin-bottom:8px"><label>照片（第一張為封面）</label>
+          <div class="img-edit">${(s.imgs||[]).map((src,k)=>`<div><img src="${src}"><button data-rmimg="${k}">✕</button></div>`).join('')}</div>
+          <label class="upload">📷 上傳照片<input type="file" accept="image/*" multiple data-upload="${s.id}"></label></div>
+        <div class="field" style="margin-bottom:8px"><label>特色介紹</label><textarea data-sf="intro" rows="4">${esc(s.intro)}</textarea></div>
+        <div class="field" style="margin-bottom:8px"><label>特色標籤（用「、」分隔）</label><input data-sf="tags" value="${esc(s.tags)}"></div>
+        <div class="field" style="margin-bottom:8px"><label>歷史小故事</label><textarea data-sf="story" rows="6">${esc(s.story)}</textarea></div>
+        <div class="field"><label>地址（Google Map 導航用）</label><input data-sf="addr" value="${esc(s.addr)}"></div>
+        <div class="edit-tools" style="justify-content:space-between;margin-top:10px">
+          <button class="btn btn-ghost btn-sm" data-delspot="${s.id}">🗑 刪除站點</button>
+          <button class="btn btn-primary btn-sm" data-donespot="${s.id}">✓ 完成</button></div></div>`;
+    }else{
+      h+=(s.imgs&&s.imgs.length)?`<div class="gallery">${s.imgs.map(src=>`<img src="${src}" loading="lazy" alt="${esc(s.name)}">`).join('')}</div>`
+        :`<div class="cover-empty owner-only">📷 按「編輯」上傳照片</div>`;
+      h+=`<p>${esc(s.intro)}</p>
+        <div class="chips">${splitTags(s.tags).map(x=>`<span class="chip ${s.cat==='信仰'?'brick':s.cat==='歷史'?'gold':''}">${esc(x)}</span>`).join('')}</div>
+        <div class="story ${openStory.has(s.id)?'show':''}" id="story-${s.id}"><h4>📜 歷史小故事</h4>${esc(s.story)}</div>
+        <div class="actions">
+          <button class="link-btn" data-story="${s.id}">${openStory.has(s.id)?'收合小故事 ▲':'📜 歷史小故事 ▼'}</button>
+          <a class="map-btn" href="${mapUrl(s.addr,mode)}" target="_blank" rel="noopener">📍 Google Map</a>
+          <button class="btn btn-soft btn-sm owner-only" data-editspot="${s.id}" style="border-radius:10px">✏️ 編輯</button>
+        </div>`;
+    }
+    h+='</div></div></div>';
+  });
+  const L=$('#spotList');L.innerHTML=h;
+  L.querySelectorAll('[data-toggle]').forEach(el=>el.onclick=()=>{const id=el.dataset.toggle;openSpots.has(id)?openSpots.delete(id):openSpots.add(id);$('#spot-'+id).classList.toggle('open');});
+  L.querySelectorAll('[data-story]').forEach(b=>b.onclick=()=>{const id=b.dataset.story;const st=$('#story-'+id);
+    if(openStory.has(id)){openStory.delete(id);st.classList.remove('show');b.innerHTML='📜 歷史小故事 ▼';}else{openStory.add(id);st.classList.add('show');b.innerHTML='收合小故事 ▲';}});
+  L.querySelectorAll('[data-editspot]').forEach(b=>b.onclick=()=>{editingSpot=b.dataset.editspot;renderSpots();});
+  L.querySelectorAll('[data-donespot]').forEach(b=>b.onclick=()=>{editingSpot=null;save('spots');renderSpots();renderTrip();toast('✓ 站點已儲存');publishLive();});
+  L.querySelectorAll('[data-delspot]').forEach(b=>b.onclick=async()=>{const id=b.dataset.delspot;const sp=S.spots.find(x=>x.id===id);
+    if(!await confirmBox('刪除站點？','「'+sp.name+'」的介紹與照片都會刪除。','刪除'))return;
+    S.spots=S.spots.filter(x=>x.id!==id);S.trip.forEach(t=>{if(t.spot===id)t.spot='';});save('spots');save('trip');editingSpot=null;renderSpots();renderTrip();publishLive();});
+  if(editingSpot){const s=S.spots.find(x=>x.id===editingSpot);const box=$('#spot-'+editingSpot);
+    box.querySelectorAll('[data-sf]').forEach(inp=>inp.oninput=inp.onchange=()=>{s[inp.dataset.sf]=inp.value;save('spots');
+      if(inp.dataset.sf==='cat')box.className='spot open cat-'+inp.value;
+      if(inp.dataset.sf==='name')box.querySelector('.ttl').textContent=inp.value;});
+    box.querySelectorAll('[data-rmimg]').forEach(b=>b.onclick=()=>{s.imgs.splice(+b.dataset.rmimg,1);save('spots');renderSpots();});
+    const up=box.querySelector('[data-upload]');up.onchange=async()=>{
+      toast('照片處理中…');s.imgs=s.imgs||[];
+      for(const f of up.files){try{const d=await compress(f);
+        if(ASSETS){const blob=await (await fetch(d)).blob();const r=await ASSETS.upload(blob);s.imgs.push(r.url||('/_blob/'+r.id));}
+        else if(CLOUD){const r=await api({action:'upload',pw:getPw(),dataUrl:d});if(!r.ok)throw r;s.imgs.push(r.url);}
+        else s.imgs.push(d);}catch(e){toast('⚠️ 照片上傳失敗');}}markDirty();
+      if(!save('spots')){s.imgs.pop();save('spots');}renderSpots();toast('✓ 照片已加入');};
+  }
+}
+function compress(file,max=1000,q=.72){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{
+  let w=img.width,h=img.height;if(w>max||h>max){const k=max/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k);}
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',q));};img.onerror=rej;img.src=r.result;};r.onerror=rej;r.readAsDataURL(file);});}
+$('#spotExpandAll').onclick=()=>{const all=openSpots.size<S.spots.length;S.spots.forEach(s=>all?openSpots.add(s.id):openSpots.delete(s.id));
+  $('#spotExpandAll').innerHTML=all?'⇅ 全部收合':'⇅ 全部展開';renderSpots();};
+$('#spotAdd').onclick=()=>{const id='s'+Date.now();S.spots.push({id,name:'新站點',cat:'其他',addr:'',intro:'',tags:'',story:'',imgs:[]});
+  save('spots');openSpots.add(id);editingSpot=id;renderSpots();setTimeout(()=>$('#spot-'+id).scrollIntoView({behavior:'smooth',block:'start'}),60);};
+function gotoSpot(id){switchTab('spot');openSpots.add(id);openStory.add(id);renderSpots();
+  setTimeout(()=>{const el=$('#spot-'+id);if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+scrollY-64,behavior:'smooth'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),1700);},80);}
+
+/* ================= 來佳 ================= */
+let introEdit=false;
+const COMPASS=`<svg class="compass" viewBox="0 0 340 360" xmlns="http://www.w3.org/2000/svg" font-family="Noto Serif TC, serif">
+  <defs>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+    <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2"/><feColorMatrix values="0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.3  0 0 0 0.07 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="#963F32" stroke-width="1.2" opacity=".35"/></pattern>
+  </defs>
+  <rect x="2" y="2" width="336" height="356" rx="14" fill="#F7F2E8"/>
+  <rect x="2" y="2" width="336" height="356" rx="14" fill="#fff" filter="url(#paper)"/>
+  <!-- sea -->
+  <g filter="url(#rough)">
+    <path d="M2 16 Q2 2 16 2 L44 2 C40 30 50 60 54 92 C58 118 50 140 58 152 C46 178 30 196 34 226 C40 262 54 286 46 318 L42 358 L16 358 Q2 358 2 344Z" fill="#cfdde0"/>
+    <path d="M58 152 C70 170 64 196 52 214 C42 230 44 252 56 262 C40 256 34 236 36 220 C38 196 48 172 58 152Z" fill="#b9d0d4"/>
+  </g>
+  <g stroke="#7fa3ad" stroke-width="1.2" fill="none" opacity=".7" stroke-linecap="round">
+    <path d="M10 60 q5 -4 10 0 t10 0"/><path d="M14 130 q5 -4 10 0 t10 0"/><path d="M8 200 q5 -4 10 0 t10 0"/><path d="M12 290 q5 -4 10 0 t10 0"/>
+  </g>
+  <text x="18" y="168" font-size="12" fill="#4f7d93" font-weight="700" writing-mode="tb" letter-spacing="4">臺灣海峽</text>
+  <text x="46" y="246" font-size="8.5" fill="#4f7d93" writing-mode="tb">七股潟湖</text>
+  <!-- districts -->
+  <g filter="url(#rough)" stroke="#8a7f6c" stroke-width="1.6" stroke-dasharray="5 3" stroke-linejoin="round">
+    <path d="M44 2 L140 2 L142 70 L92 80 L54 92 C50 60 40 30 44 2Z" fill="#e8e0cf"/>
+    <path d="M140 2 L252 2 L248 86 L178 104 L142 70Z" fill="#ece5d6"/>
+    <path d="M252 2 L338 2 L338 98 L248 86Z" fill="#e4dccb"/>
+    <path d="M54 92 L92 80 L142 70 L178 104 L152 140 L66 150 C60 130 58 112 54 92Z" fill="#e9e3d3"/>
+    <path d="M248 86 L338 98 L338 228 L262 172Z" fill="#e6dfcd"/>
+    <path d="M66 150 L152 140 L140 186 L158 262 L150 300 L60 300 C50 280 40 256 56 262 C44 252 42 230 52 214 C64 196 70 170 58 152Z" fill="#ebe4d4"/>
+    <path d="M140 186 L204 200 L262 172 L274 256 L158 262Z" fill="#e7dfcd"/>
+    <path d="M150 300 L158 262 L274 256 L338 228 L338 358 L46 358 L60 300Z" fill="#efe9dd"/>
+    <path d="M152 140 L178 104 L248 86 L262 172 L204 200 L140 186Z" fill="url(#hatch)" stroke="#963F32" stroke-width="2.4" stroke-dasharray="0"/>
+  </g>
+  <path d="M152 140 L178 104 L248 86 L262 172 L204 200 L140 186Z" fill="#963F32" opacity=".14" filter="url(#rough)"/>
+  <!-- rivers -->
+  <g fill="none" stroke-linecap="round" filter="url(#rough)">
+    <path d="M338 22 C300 30 270 14 236 22 C200 32 170 46 140 42 C110 38 80 52 50 56" stroke="#9fc0ca" stroke-width="7"/>
+    <path d="M338 22 C300 30 270 14 236 22 C200 32 170 46 140 42 C110 38 80 52 50 56" stroke="#4f7d93" stroke-width="2"/>
+    <path d="M240 90 C214 100 196 104 176 112 C150 120 120 112 96 120 C78 126 66 122 56 126" stroke="#9fc0ca" stroke-width="5"/>
+    <path d="M240 90 C214 100 196 104 176 112 C150 120 120 112 96 120 C78 126 66 122 56 126" stroke="#4f7d93" stroke-width="1.6"/>
+    <path d="M338 214 C312 232 292 248 268 266 C240 282 206 274 176 282 C140 292 110 306 84 312 C66 316 54 314 44 316" stroke="#9fc0ca" stroke-width="10"/>
+    <path d="M338 214 C312 232 292 248 268 266 C240 282 206 274 176 282 C140 292 110 306 84 312 C66 316 54 314 44 316" stroke="#4f7d93" stroke-width="2.4"/>
+  </g>
+  <g font-size="10" fill="#3f6f84" font-weight="700" font-style="italic">
+    <text x="196" y="22" transform="rotate(-6 196 22)">急水溪</text>
+    <text x="92" y="112" transform="rotate(-4 92 112)">將軍溪</text>
+    <text x="196" y="298" transform="rotate(-8 196 298)" font-size="12">曾文溪</text>
+  </g>
+  <!-- labels -->
+  <g fill="#39352F" font-weight="700" text-anchor="middle" font-size="13.5">
+    <text x="96" y="40">北門</text><text x="196" y="66">學甲</text><text x="296" y="52">下營</text>
+    <text x="104" y="136">將軍</text><text x="302" y="156">麻豆</text><text x="104" y="230">七股</text>
+    <text x="214" y="240">西港</text><text x="230" y="336" font-size="11" fill="#7a7368">安定・善化（曾文溪以南）</text>
+  </g>
+  <!-- Jiali -->
+  <text x="208" y="150" text-anchor="middle" font-size="24" font-weight="900" fill="#963F32" letter-spacing="2">佳里</text>
+  <g font-family="Noto Sans TC, sans-serif" font-size="8.5" fill="#39352F">
+    <circle cx="212" cy="164" r="3.5" fill="#963F32" stroke="#F3EEE3" stroke-width="1.2"/><text x="219" y="167">市區・金唐殿</text>
+    <circle cx="168" cy="130" r="3.5" fill="#606B4C" stroke="#F3EEE3" stroke-width="1.2"/><text x="161" y="125" text-anchor="end">北頭洋</text>
+    <circle cx="196" cy="178" r="3.5" fill="#C2A36D" stroke="#F3EEE3" stroke-width="1.2"/><text x="189" y="186" text-anchor="end">蕭壠文化園區</text>
+  </g>
+  <!-- compass -->
+  <g transform="translate(306,300)" filter="url(#rough)"><circle r="17" fill="#F3EEE3" stroke="#606B4C" stroke-width="1.6"/><path d="M0 -13 L5 3 L0 0 L-5 3Z" fill="#606B4C"/><path d="M0 13 L5 -3 L0 0 L-5 -3Z" fill="#C2A36D"/></g>
+  <text x="306" y="278" text-anchor="middle" font-size="10" fill="#606B4C" font-weight="700">N</text>
+  <text x="330" y="352" text-anchor="end" font-size="8.5" fill="#9a9286" font-family="Noto Sans TC, sans-serif">手繪示意・非實際比例</text>
+</svg>`;
+const FOOD=[['肉脯','中山路老店手工肉脯'],['米苔目','市場裡的米食老味道'],['菜燕','石花菜做的消暑涼品'],['菜炸','蔬菜裹粉現炸小吃'],['南北貨','乾貨香料一次買齊'],['糖廠冰','蕭壠園區必吃冰品']];
+function renderIntro(){
+  let h='';
+  S.intro.forEach((c,i)=>{
+    h+=`<article class="chap"><div class="chap-head"><div class="chap-num">0${i+1}</div><h2>${esc(c.title)}<small>${esc(c.en||'')}</small></h2></div>`;
+    if(introEdit){
+      h+=`<div style="padding:4px 16px 16px"><div class="field" style="margin-bottom:8px"><label>標題</label><input data-ii="${i}" data-k="title" value="${esc(c.title)}"></div>
+        <div class="field"><label>內文</label><textarea data-ii="${i}" data-k="body" rows="8">${esc(c.body)}</textarea></div></div>`;
+    }else{
+      h+=`<div class="chap-body">${esc(c.body)}</div>`;
+    }
+    if(c.key==='geo'){h+=`<div style="padding:0 16px 16px">${COMPASS}
+      <iframe class="map-frame local-only" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent('臺南市佳里區')}&z=12&output=embed" title="佳里區地圖"></iframe>
+      <div class="actions" style="margin-top:10px"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('臺南市佳里區')}" target="_blank" rel="noopener">📍 在 Google Map 開啟佳里</a></div></div>`;}
+    if(c.key==='food'&&!introEdit){h+=`<div class="foodgrid">${FOOD.map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join('')}</div>`;}
+    if(c.key==='faith'&&!introEdit){h+=`<div style="padding:0 16px 16px" class="actions"><button class="link-btn" data-goto="jintang">📜 金唐殿</button><button class="link-btn" data-goto="beitouyang">📜 北頭洋</button></div>`;}
+    h+='</article>';
+  });
+  const v=$('#introView');v.innerHTML=h;
+  v.querySelectorAll('[data-ii]').forEach(inp=>inp.oninput=()=>{S.intro[+inp.dataset.ii][inp.dataset.k]=inp.value;save('intro');});
+  v.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{if(S.spots.find(s=>s.id===b.dataset.goto))gotoSpot(b.dataset.goto);else toast('找不到這個站點');});
+}
+$('#introEditBtn').onclick=()=>{introEdit=!introEdit;if(!introEdit){toast('✓ 內文已儲存');publishLive();}
+  $('#introEditBtn').innerHTML=introEdit?'✓ 完成':'✏️ 編輯內文';$('#introEditBtn').className='btn btn-sm owner-only '+(introEdit?'btn-primary':'btn-ghost');renderIntro();};
+
+/* ================= 匯出匯入 ================= */
+function exportData(){const blob=new Blob([JSON.stringify(S)],{type:'application/json'});const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='回佳行程備份_'+S.meta.date+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('已匯出備份檔');}
+$('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
+  Object.keys(DEFAULTS).forEach(k=>{if(d[k]){S[k]=d[k];save(k);}});renderAll();toast('✓ 已匯入備份');publishLive();}catch(err){toast('⚠️ 檔案格式不正確');}};r.readAsText(f);e.target.value='';};
+
+/* ================= 編輯者模式 ================= */
+function exportShare(){
+  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  const json=JSON.stringify(data).replace(/</g,'\\u003c');
+  const marker='/*__DA'+'TA__*/null';
+  const html=SRC.replace(marker,json);
+  const blob=new Blob([html],{type:'text/html'});const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='回佳_分享版.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  toast('已下載分享版，傳給同行者即可');
+}
+function setOwner(on){document.body.classList.toggle('owner',on);if(!on&&CLOUD){try{localStorage.removeItem('huijia_cloud_pw');}catch(e){}}try{on?localStorage.setItem(KEY+'owner','1'):localStorage.removeItem(KEY+'owner');}catch(e){}
+  if(!on){if(tripEdit)$('#tripEditBtn').click();if(packManage)$('#packManage').click();if(introEdit)$('#introEditBtn').click();editingSpot=null;renderSpots();}}
+if(!PUB&&!CLOUD){
+  try{if(localStorage.getItem(KEY+'owner')==='1')document.body.classList.add('owner');}catch(e){}
+  let taps=0,tapT;
+  $('.brand').onclick=()=>{if(LIVE)return;taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
+    if(taps<5||document.body.classList.contains('owner'))return;taps=0;
+    let pin=null;try{pin=localStorage.getItem(KEY+'pin');}catch(e){}
+    if(!pin){const n=prompt('第一次使用：請設定編輯密碼（4 位數以上）');if(!n||n.length<4){toast('未設定密碼');return;}
+      try{localStorage.setItem(KEY+'pin',n);}catch(e){}setOwner(true);toast('🔓 已開啟編輯者模式');return;}
+    const t=prompt('請輸入編輯密碼');if(t===null)return;
+    if(t===pin){setOwner(true);toast('🔓 已開啟編輯者模式');}else toast('密碼錯誤');};
+  $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已鎖定，目前為唯讀畫面');};
+}
+
+/* ================= 線上即時版（Claude 發布網頁） ================= */
+const HEAD='<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="theme-color" content="#F3EEE3">\n<title>一起回佳｜佳里 2026.11.18</title>\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">\n';
+let dirty=false;
+function markDirty(){if(!(LIVE||CLOUD)||!document.body.classList.contains('owner'))return;dirty=true;document.body.classList.add('dirty');}
+let publishing=false;
+async function publishLive(){
+  if(CLOUD)return cloudSave();
+  if(!LIVE||!ART||!document.body.classList.contains('owner')||publishing)return;
+  publishing=true;toast('☁️ 同步中…');
+  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  const json=JSON.stringify(data).replace(/</g,'\\u003c');
+  const html='<!DOCTYPE html>\n<html lang="zh-Hant">\n<head>\n'+HEAD+'<style id="appStyle">'+APP_CSS+'</style>\n</head>\n<body>\n'+APP_BODY+
+    '\n<script type="application/json" id="state">'+json+'<\/script>\n<script>'+APP_JS+'<\/script>\n</body>\n</html>';
+  try{await ART.publish(html);dirty=false;document.body.classList.remove('dirty');toast('✓ 已同步，大家都看得到了');}
+  catch(e){const c=String((e&&(e.code||e.message))||e);
+    if(/conflict/i.test(c))toast('內容剛被更新，重新載入中…');
+    else if(/not_granted|not_writer/i.test(c)){toast('你沒有編輯權限');document.body.classList.remove('owner');}
+    else toast('⚠️ 同步失敗，請再按一次「立即同步」');}
+  publishing=false;
+}
+$('#syncBtn').onclick=publishLive;
+(async()=>{
+  try{
+    if(CLOUD)return;
+    if(!window.claude||typeof window.claude.use!=='function')return;
+    const [art,usr,ast]=await Promise.all([claude.use('artifact'),claude.use('user'),claude.use('assets')]);
+    if(!art)return;
+    ART=art;ASSETS=ast;LIVE=true;document.body.classList.add('live');
+    let owner=false;
+    try{owner=!!(await usr?.isOwner?.());if(!owner)owner=!!(await usr?.canEdit?.());}catch(e){}
+    document.body.classList.toggle('owner',owner);
+    $('#ownerText').textContent='✏️ 編輯者模式・按「完成」就同步給所有人';
+    renderAll();
+  }catch(e){}
+})();
+
+/* ================= 雲端同步（Google Apps Script） ================= */
+function getPw(){try{return localStorage.getItem('huijia_cloud_pw')||'';}catch(e){return '';}}
+async function api(body){
+  const opt=body?{method:'POST',body:JSON.stringify(body)}:{cache:'no-store'};
+  const url=body?API_URL:API_URL+(API_URL.includes('?')?'&':'?')+'t='+Date.now();
+  return (await fetch(url,opt)).json();
+}
+let cloudVer=null;
+function isBusy(){return tripEdit||packManage||introEdit||editingSpot||dirty||publishing;}
+function applyData(d){
+  ['meta','trip','spots','intro'].forEach(k=>{if(d[k])S[k]=d[k];});
+  if(d.pack){const done=getDone();S.pack=d.pack.map(p=>({...p,done:done.includes(p.id)}));}
+  try{localStorage.setItem('huijia_cloud_cache',JSON.stringify(d));}catch(e){}
+  renderAll();
+}
+async function cloudFetch(first){
+  if(!CLOUD||isBusy())return;
+  try{
+    if(!first){const v=await (await fetch(API_URL+(API_URL.includes('?')?'&':'?')+'action=version&t='+Date.now(),{cache:'no-store'})).json();if(v.version===cloudVer)return;}
+    const r=await api();if(!r.ok)return;
+    if(isBusy())return;
+    cloudVer=r.version;if(r.data)applyData(r.data);
+  }catch(e){}
+}
+async function cloudSave(){
+  if(!document.body.classList.contains('owner')||publishing)return;
+  publishing=true;toast('☁️ 同步中…');
+  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  try{
+    const r=await api({action:'save',pw:getPw(),data});
+    if(r.ok){dirty=false;document.body.classList.remove('dirty');cloudVer=r.version||cloudVer;
+      try{localStorage.setItem('huijia_cloud_cache',JSON.stringify(data));}catch(e){}toast('✓ 已同步，大家都看得到了');}
+    else if(r.error==='wrong_password'){toast('密碼錯誤，請重新登入');setOwner(false);}
+    else toast('⚠️ 同步失敗，請按「立即同步」再試');
+  }catch(e){toast('⚠️ 網路不穩，請按「立即同步」再試');}
+  publishing=false;
+}
+if(CLOUD){
+  document.body.classList.add('cloud');
+  $('#ownerText').textContent='✏️ 編輯者模式・按「完成」就同步給所有人';
+  if(getPw())document.body.classList.add('owner');
+  let taps=0,tapT;
+  $('.brand').onclick=()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
+    if(taps<5||document.body.classList.contains('owner'))return;taps=0;
+    $('#pwInput').value='';$('#pwModal').classList.add('show');setTimeout(()=>$('#pwInput').focus(),50);};
+  $('#pwNo').onclick=()=>$('#pwModal').classList.remove('show');
+  $('#pwInput').onkeydown=e=>{if(e.key==='Enter')$('#pwYes').click();};
+  $('#pwYes').onclick=async()=>{
+    const pw=$('#pwInput').value;if(!pw)return;$('#pwYes').textContent='驗證中…';
+    try{const r=await api({action:'login',pw});
+      if(r.ok){try{localStorage.setItem('huijia_cloud_pw',pw);}catch(e){}$('#pwModal').classList.remove('show');
+        document.body.classList.add('owner');toast('🔓 已開啟編輯者模式');}
+      else toast('密碼錯誤');
+    }catch(e){toast('⚠️ 連不上雲端，請檢查網路');}
+    $('#pwYes').textContent='登入';};
+  $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已登出，目前為唯讀畫面');};
+  setTimeout(()=>cloudFetch(true),0);
+  setInterval(()=>{if(document.visibilityState==='visible')cloudFetch(false);},30000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')cloudFetch(false);});
+}
+
+/* ================= 導覽列 ================= */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id==='tab-'+name));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  window.scrollTo({top:0});try{sessionStorage.setItem(KEY+'tab',name);}catch(e){}
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+
+function renderAll(){renderMeta();renderTrip();renderPack();renderSpots();renderIntro();}
+renderAll();
+try{const t=sessionStorage.getItem(KEY+'tab');if(t)switchTab(t);}catch(e){}
+</script>
+</body>
+</html>
