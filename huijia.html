@@ -2,13 +2,13 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F3EEE3">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>一起回佳｜佳里半日行 2026.11.18</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
+<style id="appStyle">
 :root{
   --cream:#F3EEE3; --brick:#963F32; --gold:#C2A36D; --char:#39352F;
   --olive:#606B4C; --sand:#D9CDBB;
@@ -229,6 +229,11 @@ input,select,textarea{font-family:inherit;font-size:15px;color:var(--char)}
 .settings h4{margin:0 0 8px;font-family:var(--serif);color:var(--char)}
 .settings .actions{gap:6px}
 body:not(.owner) .owner-only{display:none!important}
+body.live .local-only{display:none!important}
+.sync-btn{display:none}
+body.dirty .sync-btn{display:inline-block}
+body.cloud .no-cloud{display:none!important}
+.pw-input{width:100%;border:1px solid var(--sand);background:#fff;border-radius:10px;padding:10px 12px;font-size:16px;margin-bottom:14px;outline:none;text-align:center;letter-spacing:.2em}
 .owner-bar{display:none;align-items:center;justify-content:space-between;gap:8px;background:var(--char);color:var(--cream);font-size:12.5px;padding:7px 16px}
 body.owner .owner-bar{display:flex}
 .owner-bar button{background:var(--gold);color:var(--char);border:none;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700}
@@ -251,7 +256,7 @@ body.owner .owner-bar{display:flex}
 </div>
 
 <!-- ========== Header ========== -->
-<div class="owner-bar"><span>🔓 編輯者模式（只有你看得到）</span><button id="lockBtn">🔒 鎖定</button></div>
+<div class="owner-bar"><span id="ownerText">🔓 編輯者模式（只有你看得到）</span><span><button class="sync-btn" id="syncBtn">☁️ 立即同步</button> <button id="lockBtn" class="local-only">🔒 鎖定</button></span></div>
 <header class="topbar">
   <div class="brand"><span class="seal">歡迎來「佳」</span></div>
   <div class="top-meta"><b id="topDate">11/18（三）</b><br><span id="topTime">10:30–14:30</span></div>
@@ -297,6 +302,7 @@ body.owner .owner-bar{display:flex}
       <input id="packInput" placeholder="輸入物品名稱">
       <button class="btn btn-olive btn-sm" id="packAddBtn">＋</button>
     </div>
+    <div class="add-row" id="packNewCatRow" style="display:none"><input id="packNewCat" placeholder="新分類名稱"></div>
   </div>
 </section>
 
@@ -343,11 +349,20 @@ body.owner .owner-bar{display:flex}
   <h3 id="modalTitle">確定嗎？</h3><p id="modalText"></p>
   <div class="btns"><button class="btn btn-soft" id="modalNo">取消</button><button class="btn btn-primary" id="modalYes">確定</button></div>
 </div></div>
+<div class="modal" id="pwModal"><div class="modal-card">
+  <h3>編輯者登入</h3><p>輸入編輯密碼後即可修改內容</p>
+  <input type="password" class="pw-input" id="pwInput" autocomplete="current-password" placeholder="密碼">
+  <div class="btns"><button class="btn btn-soft" id="pwNo">取消</button><button class="btn btn-primary" id="pwYes">登入</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 <input type="file" id="importFile" accept="application/json" style="display:none">
 </div>
 
+<script type="application/json" id="state">null</script>
 <script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbygfbFELKmos7ukvatFGgGrFT7290AakrNds34i-tOSCUNmjn1Ghuu8xSn1DiRhi7ZF/exec';
+const CLOUD = !!API_URL;
+
 /* ================= 預設資料 ================= */
 const DEFAULTS = {
   meta:{date:'2026-11-18',start:'10:30',end:'14:30',people:6},
@@ -414,8 +429,14 @@ const DEFAULTS = {
 
 /* ================= 儲存 ================= */
 const SRC='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+const APP_JS=document.currentScript?document.currentScript.textContent:'';
+const APP_CSS=document.getElementById('appStyle').textContent;
+const APP_BODY=document.querySelector('.app').outerHTML;
+let EMB=null;try{EMB=JSON.parse(document.getElementById('state').textContent);}catch(e){}
 const PUBLISHED=/*__DATA__*/null;   // 分享版會把資料寫在這裡，並停用編輯
-const PUB=PUBLISHED;
+let CACHE=null;if(CLOUD){try{CACHE=JSON.parse(localStorage.getItem('huijia_cloud_cache')||'null');}catch(e){}}
+const PUB=PUBLISHED||EMB||(CLOUD?(CACHE||JSON.parse(JSON.stringify(DEFAULTS))):null);
+let LIVE=false,ART=null,ASSETS=null;
 const KEY=PUB?'huijia_pub_':'huijia_v2_';
 const clone=o=>JSON.parse(JSON.stringify(o));
 function getDone(){try{return JSON.parse(localStorage.getItem(KEY+'done')||'[]');}catch(e){return [];}}
@@ -423,6 +444,7 @@ function load(k){
   if(PUB){if(k==='pack'){const d=getDone();return PUB.pack.map(p=>({...p,done:d.includes(p.id)}));}return clone(PUB[k]);}
   try{const v=localStorage.getItem(KEY+k);return v?JSON.parse(v):clone(DEFAULTS[k]);}catch(e){return clone(DEFAULTS[k]);}}
 function save(k){
+  if(k!=='pack')markDirty();
   if(PUB){if(k==='pack'){try{localStorage.setItem(KEY+'done',JSON.stringify(S.pack.filter(p=>p.done).map(p=>p.id)));}catch(e){}}return true;}
   try{localStorage.setItem(KEY+k,JSON.stringify(S[k]));return true;}catch(e){toast('⚠️ 儲存空間不足，請減少照片');return false;}}
 const S={meta:load('meta'),trip:load('trip'),pack:load('pack'),spots:load('spots'),intro:load('intro')};
@@ -439,7 +461,8 @@ function confirmBox(title,text,yesText){return new Promise(r=>{$('#modalTitle').
   const done=v=>{m.classList.remove('show');$('#modalYes').onclick=$('#modalNo').onclick=null;r(v);};$('#modalYes').onclick=()=>done(true);$('#modalNo').onclick=()=>done(false);});}
 
 /* ================= Splash ================= */
-$('#agreeBtn').onclick=()=>{$('#splash').classList.add('hide');};
+$('#agreeBtn').onclick=()=>{$('#splash').classList.add('hide');try{sessionStorage.setItem('huijia_agreed','1');}catch(e){}};
+try{if(sessionStorage.getItem('huijia_agreed')==='1')$('#splash').classList.add('hide');}catch(e){}
 
 /* ================= Meta ================= */
 function renderMeta(){
@@ -475,8 +498,8 @@ function renderTrip(){
       <div class="edit-tools"><button class="icon-btn" data-act="up">↑</button><button class="icon-btn" data-act="down">↓</button><button class="icon-btn danger" data-act="del">🗑</button></div></div>`;});
     h+=`<div style="padding:0 16px"><button class="btn btn-olive btn-block" id="tripAddRow">＋ 新增一站</button></div>
     <div class="settings"><h4>資料備份</h4><p class="hint" style="padding:0;margin:0 0 10px">資料存在這支手機的瀏覽器裡。換手機或分享給同行者前，可先匯出備份檔。</p>
-    <div class="actions" style="margin-bottom:8px"><button class="btn btn-primary btn-sm" id="shareBtn">📤 下載分享版（同行者用・不可編輯）</button></div>
-    <div class="actions"><button class="btn btn-soft btn-sm" id="exportBtn">⬇ 匯出備份</button><button class="btn btn-soft btn-sm" id="importBtn">⬆ 匯入備份</button><button class="btn btn-ghost btn-sm" id="resetBtn">↺ 還原預設</button></div></div>`;
+    <div class="actions local-only no-cloud" style="margin-bottom:8px"><button class="btn btn-primary btn-sm" id="shareBtn">📤 下載分享版（同行者用・不可編輯）</button></div>
+    <div class="actions"><button class="btn btn-soft btn-sm local-only" id="exportBtn">⬇ 匯出備份</button><button class="btn btn-soft btn-sm" id="importBtn">⬆ 匯入備份</button><button class="btn btn-ghost btn-sm" id="resetBtn">↺ 還原預設</button></div></div>`;
     v.innerHTML=h;bindTripEdit();return;
   }
   let h='<div class="timeline">';
@@ -518,11 +541,11 @@ function bindTripEdit(){
   $('#tripAddRow').onclick=()=>{const last=S.trip[S.trip.length-1];S.trip.push({time:last?last.time:S.meta.start,name:'新站點',mode:'開車',act:'',addr:'',spot:''});save('trip');renderTrip();setTimeout(()=>v.querySelector('.edit-card[data-i]:last-of-type')?.scrollIntoView({behavior:'smooth',block:'center'}),50);};
   $('#exportBtn').onclick=exportData;$('#shareBtn').onclick=exportShare;$('#importBtn').onclick=()=>$('#importFile').click();
   $('#resetBtn').onclick=async()=>{if(!await confirmBox('還原預設資料？','行程、行李、站點與介紹都會回到最初版本，上傳的照片也會清除。','還原'))return;
-    Object.keys(DEFAULTS).forEach(k=>{S[k]=clone(DEFAULTS[k]);save(k);});renderAll();toast('已還原預設');};
+    Object.keys(DEFAULTS).forEach(k=>{S[k]=clone(DEFAULTS[k]);save(k);});renderAll();toast('已還原預設');publishLive();};
 }
 $('#tripEditBtn').onclick=()=>{
   tripEdit=!tripEdit;
-  if(!tripEdit){S.trip.sort((a,b)=>toMin(a.time)-toMin(b.time));save('trip');toast('✓ 行程已儲存');}
+  if(!tripEdit){S.trip.sort((a,b)=>toMin(a.time)-toMin(b.time));save('trip');toast('✓ 行程已儲存');publishLive();}
   $('#tripEditBtn').innerHTML=tripEdit?'✓ 完成':'✏️ 編輯行程';
   $('#tripEditBtn').className='btn btn-sm owner-only '+(tripEdit?'btn-primary':'btn-ghost');
   renderTrip();
@@ -544,7 +567,7 @@ function renderPack(){
     if(e.target.closest('[data-del]'))return;
     const p=S.pack.find(x=>x.id===el.dataset.id);p.done=!p.done;el.classList.toggle('done',p.done);save('pack');updateProgress();
     if(navigator.vibrate)navigator.vibrate(12);});
-  list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{S.pack=S.pack.filter(x=>x.id!==b.dataset.del);save('pack');renderPack();});
+  list.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{S.pack=S.pack.filter(x=>x.id!==b.dataset.del);save('pack');markDirty();renderPack();});
   $('#packCat').innerHTML=[...cats,'＋ 新分類'].map(c=>`<option>${esc(c)}</option>`).join('');
   updateProgress();
 }
@@ -558,12 +581,13 @@ $('#packClear').onclick=async()=>{
   if(!S.pack.some(p=>p.done)){toast('目前沒有勾選的項目');return;}
   if(!await confirmBox('一鍵清空勾選？','所有已勾選的項目都會取消，項目本身不會被刪除。','清空'))return;
   S.pack.forEach(p=>p.done=false);save('pack');renderPack();toast('已清空所有勾選');};
-$('#packManage').onclick=()=>{packManage=!packManage;$('#packAdd').style.display=packManage?'':'none';
+$('#packManage').onclick=()=>{packManage=!packManage;if(!packManage)publishLive();$('#packAdd').style.display=packManage?'':'none';
   $('#packManage').innerHTML=packManage?'✓ 完成':'⚙︎ 管理項目';$('#packManage').className='btn btn-sm owner-only '+(packManage?'btn-olive':'btn-ghost');renderPack();};
 $('#packAddBtn').onclick=()=>{
   const name=$('#packInput').value.trim();if(!name){$('#packInput').focus();return;}
-  let cat=$('#packCat').value;if(cat==='＋ 新分類'){cat=prompt('新分類名稱','其他')||'其他';}
-  S.pack.push({id:'p'+Date.now(),cat,name,note:'',done:false});save('pack');$('#packInput').value='';renderPack();toast('已新增：'+name);};
+  let cat=$('#packCat').value;if(cat==='＋ 新分類'){cat=($('#packNewCat').value||'').trim()||'其他';$('#packNewCat').value='';}
+  S.pack.push({id:'p'+Date.now(),cat,name,note:'',done:false});save('pack');markDirty();$('#packInput').value='';renderPack();toast('已新增：'+name);};
+$('#packCat').onchange=()=>{$('#packNewCatRow').style.display=$('#packCat').value==='＋ 新分類'?'':'none';};
 $('#packInput').onkeydown=e=>{if(e.key==='Enter')$('#packAddBtn').click();};
 
 /* ================= 站點 ================= */
@@ -613,10 +637,10 @@ function renderSpots(){
   L.querySelectorAll('[data-story]').forEach(b=>b.onclick=()=>{const id=b.dataset.story;const st=$('#story-'+id);
     if(openStory.has(id)){openStory.delete(id);st.classList.remove('show');b.innerHTML='📜 歷史小故事 ▼';}else{openStory.add(id);st.classList.add('show');b.innerHTML='收合小故事 ▲';}});
   L.querySelectorAll('[data-editspot]').forEach(b=>b.onclick=()=>{editingSpot=b.dataset.editspot;renderSpots();});
-  L.querySelectorAll('[data-donespot]').forEach(b=>b.onclick=()=>{editingSpot=null;save('spots');renderSpots();renderTrip();toast('✓ 站點已儲存');});
+  L.querySelectorAll('[data-donespot]').forEach(b=>b.onclick=()=>{editingSpot=null;save('spots');renderSpots();renderTrip();toast('✓ 站點已儲存');publishLive();});
   L.querySelectorAll('[data-delspot]').forEach(b=>b.onclick=async()=>{const id=b.dataset.delspot;const sp=S.spots.find(x=>x.id===id);
     if(!await confirmBox('刪除站點？','「'+sp.name+'」的介紹與照片都會刪除。','刪除'))return;
-    S.spots=S.spots.filter(x=>x.id!==id);S.trip.forEach(t=>{if(t.spot===id)t.spot='';});save('spots');save('trip');editingSpot=null;renderSpots();renderTrip();});
+    S.spots=S.spots.filter(x=>x.id!==id);S.trip.forEach(t=>{if(t.spot===id)t.spot='';});save('spots');save('trip');editingSpot=null;renderSpots();renderTrip();publishLive();});
   if(editingSpot){const s=S.spots.find(x=>x.id===editingSpot);const box=$('#spot-'+editingSpot);
     box.querySelectorAll('[data-sf]').forEach(inp=>inp.oninput=inp.onchange=()=>{s[inp.dataset.sf]=inp.value;save('spots');
       if(inp.dataset.sf==='cat')box.className='spot open cat-'+inp.value;
@@ -624,7 +648,10 @@ function renderSpots(){
     box.querySelectorAll('[data-rmimg]').forEach(b=>b.onclick=()=>{s.imgs.splice(+b.dataset.rmimg,1);save('spots');renderSpots();});
     const up=box.querySelector('[data-upload]');up.onchange=async()=>{
       toast('照片處理中…');s.imgs=s.imgs||[];
-      for(const f of up.files){try{s.imgs.push(await compress(f));}catch(e){}}
+      for(const f of up.files){try{const d=await compress(f);
+        if(ASSETS){const blob=await (await fetch(d)).blob();const r=await ASSETS.upload(blob);s.imgs.push(r.url||('/_blob/'+r.id));}
+        else if(CLOUD){const r=await api({action:'upload',pw:getPw(),dataUrl:d});if(!r.ok)throw r;s.imgs.push(r.url);}
+        else s.imgs.push(d);}catch(e){toast('⚠️ 照片上傳失敗');}}markDirty();
       if(!save('spots')){s.imgs.pop();save('spots');}renderSpots();toast('✓ 照片已加入');};
   }
 }
@@ -715,7 +742,7 @@ function renderIntro(){
       h+=`<div class="chap-body">${esc(c.body)}</div>`;
     }
     if(c.key==='geo'){h+=`<div style="padding:0 16px 16px">${COMPASS}
-      <iframe class="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent('臺南市佳里區')}&z=12&output=embed" title="佳里區地圖"></iframe>
+      <iframe class="map-frame local-only" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent('臺南市佳里區')}&z=12&output=embed" title="佳里區地圖"></iframe>
       <div class="actions" style="margin-top:10px"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('臺南市佳里區')}" target="_blank" rel="noopener">📍 在 Google Map 開啟佳里</a></div></div>`;}
     if(c.key==='food'&&!introEdit){h+=`<div class="foodgrid">${FOOD.map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join('')}</div>`;}
     if(c.key==='faith'&&!introEdit){h+=`<div style="padding:0 16px 16px" class="actions"><button class="link-btn" data-goto="jintang">📜 金唐殿</button><button class="link-btn" data-goto="beitouyang">📜 北頭洋</button></div>`;}
@@ -725,14 +752,14 @@ function renderIntro(){
   v.querySelectorAll('[data-ii]').forEach(inp=>inp.oninput=()=>{S.intro[+inp.dataset.ii][inp.dataset.k]=inp.value;save('intro');});
   v.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{if(S.spots.find(s=>s.id===b.dataset.goto))gotoSpot(b.dataset.goto);else toast('找不到這個站點');});
 }
-$('#introEditBtn').onclick=()=>{introEdit=!introEdit;if(!introEdit)toast('✓ 內文已儲存');
+$('#introEditBtn').onclick=()=>{introEdit=!introEdit;if(!introEdit){toast('✓ 內文已儲存');publishLive();}
   $('#introEditBtn').innerHTML=introEdit?'✓ 完成':'✏️ 編輯內文';$('#introEditBtn').className='btn btn-sm owner-only '+(introEdit?'btn-primary':'btn-ghost');renderIntro();};
 
 /* ================= 匯出匯入 ================= */
 function exportData(){const blob=new Blob([JSON.stringify(S)],{type:'application/json'});const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download='回佳行程備份_'+S.meta.date+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('已匯出備份檔');}
 $('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
-  Object.keys(DEFAULTS).forEach(k=>{if(d[k]){S[k]=d[k];save(k);}});renderAll();toast('✓ 已匯入備份');}catch(err){toast('⚠️ 檔案格式不正確');}};r.readAsText(f);e.target.value='';};
+  Object.keys(DEFAULTS).forEach(k=>{if(d[k]){S[k]=d[k];save(k);}});renderAll();toast('✓ 已匯入備份');publishLive();}catch(err){toast('⚠️ 檔案格式不正確');}};r.readAsText(f);e.target.value='';};
 
 /* ================= 編輯者模式 ================= */
 function exportShare(){
@@ -744,12 +771,12 @@ function exportShare(){
   a.href=URL.createObjectURL(blob);a.download='回佳_分享版.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
   toast('已下載分享版，傳給同行者即可');
 }
-function setOwner(on){document.body.classList.toggle('owner',on);try{on?localStorage.setItem(KEY+'owner','1'):localStorage.removeItem(KEY+'owner');}catch(e){}
+function setOwner(on){document.body.classList.toggle('owner',on);if(!on&&CLOUD){try{localStorage.removeItem('huijia_cloud_pw');}catch(e){}}try{on?localStorage.setItem(KEY+'owner','1'):localStorage.removeItem(KEY+'owner');}catch(e){}
   if(!on){if(tripEdit)$('#tripEditBtn').click();if(packManage)$('#packManage').click();if(introEdit)$('#introEditBtn').click();editingSpot=null;renderSpots();}}
-if(!PUB){
+if(!PUB&&!CLOUD){
   try{if(localStorage.getItem(KEY+'owner')==='1')document.body.classList.add('owner');}catch(e){}
   let taps=0,tapT;
-  $('.brand').onclick=()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
+  $('.brand').onclick=()=>{if(LIVE)return;taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
     if(taps<5||document.body.classList.contains('owner'))return;taps=0;
     let pin=null;try{pin=localStorage.getItem(KEY+'pin');}catch(e){}
     if(!pin){const n=prompt('第一次使用：請設定編輯密碼（4 位數以上）');if(!n||n.length<4){toast('未設定密碼');return;}
@@ -757,6 +784,103 @@ if(!PUB){
     const t=prompt('請輸入編輯密碼');if(t===null)return;
     if(t===pin){setOwner(true);toast('🔓 已開啟編輯者模式');}else toast('密碼錯誤');};
   $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已鎖定，目前為唯讀畫面');};
+}
+
+/* ================= 線上即時版（Claude 發布網頁） ================= */
+const HEAD='<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="theme-color" content="#F3EEE3">\n<title>一起回佳｜佳里 2026.11.18</title>\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">\n';
+let dirty=false;
+function markDirty(){if(!(LIVE||CLOUD)||!document.body.classList.contains('owner'))return;dirty=true;document.body.classList.add('dirty');}
+let publishing=false;
+async function publishLive(){
+  if(CLOUD)return cloudSave();
+  if(!LIVE||!ART||!document.body.classList.contains('owner')||publishing)return;
+  publishing=true;toast('☁️ 同步中…');
+  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  const json=JSON.stringify(data).replace(/</g,'\\u003c');
+  const html='<!DOCTYPE html>\n<html lang="zh-Hant">\n<head>\n'+HEAD+'<style id="appStyle">'+APP_CSS+'</style>\n</head>\n<body>\n'+APP_BODY+
+    '\n<script type="application/json" id="state">'+json+'<\/script>\n<script>'+APP_JS+'<\/script>\n</body>\n</html>';
+  try{await ART.publish(html);dirty=false;document.body.classList.remove('dirty');toast('✓ 已同步，大家都看得到了');}
+  catch(e){const c=String((e&&(e.code||e.message))||e);
+    if(/conflict/i.test(c))toast('內容剛被更新，重新載入中…');
+    else if(/not_granted|not_writer/i.test(c)){toast('你沒有編輯權限');document.body.classList.remove('owner');}
+    else toast('⚠️ 同步失敗，請再按一次「立即同步」');}
+  publishing=false;
+}
+$('#syncBtn').onclick=publishLive;
+(async()=>{
+  try{
+    if(CLOUD)return;
+    if(!window.claude||typeof window.claude.use!=='function')return;
+    const [art,usr,ast]=await Promise.all([claude.use('artifact'),claude.use('user'),claude.use('assets')]);
+    if(!art)return;
+    ART=art;ASSETS=ast;LIVE=true;document.body.classList.add('live');
+    let owner=false;
+    try{owner=!!(await usr?.isOwner?.());if(!owner)owner=!!(await usr?.canEdit?.());}catch(e){}
+    document.body.classList.toggle('owner',owner);
+    $('#ownerText').textContent='✏️ 編輯者模式・按「完成」就同步給所有人';
+    renderAll();
+  }catch(e){}
+})();
+
+/* ================= 雲端同步（Google Apps Script） ================= */
+function getPw(){try{return localStorage.getItem('huijia_cloud_pw')||'';}catch(e){return '';}}
+async function api(body){
+  const opt=body?{method:'POST',body:JSON.stringify(body)}:{cache:'no-store'};
+  const url=body?API_URL:API_URL+(API_URL.includes('?')?'&':'?')+'t='+Date.now();
+  return (await fetch(url,opt)).json();
+}
+let cloudVer=null;
+function isBusy(){return tripEdit||packManage||introEdit||editingSpot||dirty||publishing;}
+function applyData(d){
+  ['meta','trip','spots','intro'].forEach(k=>{if(d[k])S[k]=d[k];});
+  if(d.pack){const done=getDone();S.pack=d.pack.map(p=>({...p,done:done.includes(p.id)}));}
+  try{localStorage.setItem('huijia_cloud_cache',JSON.stringify(d));}catch(e){}
+  renderAll();
+}
+async function cloudFetch(first){
+  if(!CLOUD||isBusy())return;
+  try{
+    if(!first){const v=await (await fetch(API_URL+(API_URL.includes('?')?'&':'?')+'action=version&t='+Date.now(),{cache:'no-store'})).json();if(v.version===cloudVer)return;}
+    const r=await api();if(!r.ok)return;
+    if(isBusy())return;
+    cloudVer=r.version;if(r.data)applyData(r.data);
+  }catch(e){}
+}
+async function cloudSave(){
+  if(!document.body.classList.contains('owner')||publishing)return;
+  publishing=true;toast('☁️ 同步中…');
+  const data=clone(S);data.pack.forEach(p=>p.done=false);
+  try{
+    const r=await api({action:'save',pw:getPw(),data});
+    if(r.ok){dirty=false;document.body.classList.remove('dirty');cloudVer=r.version||cloudVer;
+      try{localStorage.setItem('huijia_cloud_cache',JSON.stringify(data));}catch(e){}toast('✓ 已同步，大家都看得到了');}
+    else if(r.error==='wrong_password'){toast('密碼錯誤，請重新登入');setOwner(false);}
+    else toast('⚠️ 同步失敗，請按「立即同步」再試');
+  }catch(e){toast('⚠️ 網路不穩，請按「立即同步」再試');}
+  publishing=false;
+}
+if(CLOUD){
+  document.body.classList.add('cloud');
+  $('#ownerText').textContent='✏️ 編輯者模式・按「完成」就同步給所有人';
+  if(getPw())document.body.classList.add('owner');
+  let taps=0,tapT;
+  $('.brand').onclick=()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
+    if(taps<5||document.body.classList.contains('owner'))return;taps=0;
+    $('#pwInput').value='';$('#pwModal').classList.add('show');setTimeout(()=>$('#pwInput').focus(),50);};
+  $('#pwNo').onclick=()=>$('#pwModal').classList.remove('show');
+  $('#pwInput').onkeydown=e=>{if(e.key==='Enter')$('#pwYes').click();};
+  $('#pwYes').onclick=async()=>{
+    const pw=$('#pwInput').value;if(!pw)return;$('#pwYes').textContent='驗證中…';
+    try{const r=await api({action:'login',pw});
+      if(r.ok){try{localStorage.setItem('huijia_cloud_pw',pw);}catch(e){}$('#pwModal').classList.remove('show');
+        document.body.classList.add('owner');toast('🔓 已開啟編輯者模式');}
+      else toast('密碼錯誤');
+    }catch(e){toast('⚠️ 連不上雲端，請檢查網路');}
+    $('#pwYes').textContent='登入';};
+  $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已登出，目前為唯讀畫面');};
+  setTimeout(()=>cloudFetch(true),0);
+  setInterval(()=>{if(document.visibilityState==='visible')cloudFetch(false);},30000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')cloudFetch(false);});
 }
 
 /* ================= 導覽列 ================= */
