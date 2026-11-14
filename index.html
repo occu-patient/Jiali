@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<title>一起回佳｜佳里半日行 2026.11.18</title>
+<title>一起回佳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style id="appStyle">
@@ -374,11 +374,56 @@ body.owner .intro-filter{display:none}
 .top-meta{white-space:nowrap}
 @media (max-width:480px){.topbar{padding:10px 12px}.brand .seal{padding:0 10px;font-size:15px;letter-spacing:.06em}.about-btn{padding:0 9px;font-size:12.5px}
   .top-left{gap:6px}.top-right{gap:8px}.search-btn{width:34px;height:34px}.top-meta{font-size:11px}.top-meta b{font-size:12px}}
+
+/* ===== 團體代碼門檻 ===== */
+.gate{position:fixed;inset:0;z-index:110;background:var(--brick);color:var(--cream);display:none;align-items:center;justify-content:center;padding:24px;text-align:center}
+.gate.show{display:flex}
+.gate .seal-big{width:92px;height:92px;margin:0 auto 22px;border:3px solid var(--gold);border-radius:18px;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:46px;color:var(--gold);transform:rotate(-4deg)}
+.gate h1{font-family:var(--serif);font-weight:900;letter-spacing:.12em;margin:0 0 10px}
+.gate .info{font-size:13.5px;opacity:.88;margin-bottom:18px}
+.gate .pw-input{max-width:280px;display:block;margin:0 auto 14px;letter-spacing:.25em;font-weight:700}
+.gate #gateBtn{background:var(--cream);color:var(--brick);border:none;border-radius:999px;padding:12px 44px;font-size:16px;font-weight:900;letter-spacing:.15em;font-family:var(--serif)}
+.gate-msg{min-height:22px;margin-top:12px;font-size:13.5px;color:#f6d7a6}
+.gate-owner{margin-top:26px;background:none;border:none;color:var(--cream);opacity:.65;font-size:12.5px;text-decoration:underline}
+#pwModal{z-index:120}
+body:not(.cloud) .cloud-only{display:none!important}
+.ttl-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.ttl-row .ttl{margin-bottom:0}
+.ext-btn{width:30px;height:30px;border-radius:50%;background:var(--cream);border:1.5px solid var(--sand);display:grid;place-items:center;color:var(--brick);flex-shrink:0;transition:background .2s,color .2s}
+.ext-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ext-btn:active{background:var(--brick);color:var(--cream)}
+.ext-btn.map-ico{color:#fff;background:var(--brick);border-color:var(--brick)}
+.ext-btn.map-ico:active{background:var(--brick-d)}
+@media (hover:hover){.ext-btn.map-ico:hover{background:var(--brick-d)}}
+@media (hover:hover){.ext-btn:hover{background:var(--brick);color:var(--cream);border-color:var(--brick)}}
+
+/* ===== 圖片放大 ===== */
+.gallery img{cursor:zoom-in}
+.lightbox{position:fixed;inset:0;z-index:130;background:rgba(30,27,23,.97);display:none;align-items:center;justify-content:center;touch-action:pan-y}
+.lightbox.show{display:flex;animation:fade .2s ease}
+.lightbox img{max-width:94vw;max-height:82vh;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.4);user-select:none}
+.lb-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:42px;height:42px;border-radius:50%;border:none;background:rgba(243,238,227,.15);color:#F3EEE3;font-size:20px}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;border:none;background:rgba(243,238,227,.12);color:#F3EEE3;font-size:34px;line-height:1;border-radius:12px}
+.lb-prev{left:8px}.lb-next{right:8px}
+.lb-cap{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#F3EEE3;font-size:13.5px;font-family:var(--serif);letter-spacing:.05em}
+@media (hover:hover){.lb-nav:hover,.lb-close:hover{background:rgba(243,238,227,.28)}}
 </style>
 </head>
 <body>
 <div class="app">
 
+<!-- ========== Gate（團體代碼） ========== -->
+<div class="gate" id="gate">
+  <div class="splash-card">
+    <div class="seal-big">佳</div>
+    <h1 style="font-size:24px">請輸入團體代碼</h1>
+    <div class="info">代碼由導覽員提供，僅限本團團員查看</div>
+    <input class="pw-input" id="gateInput" autocomplete="off" autocapitalize="characters" placeholder="團體代碼">
+    <button id="gateBtn">進入</button>
+    <div class="gate-msg" id="gateMsg"></div>
+    <button class="gate-owner" id="gateOwner">導覽員登入</button>
+  </div>
+</div>
 <!-- ========== Splash ========== -->
 <div class="splash" id="splash">
   <div class="deco"></div>
@@ -495,6 +540,13 @@ body.owner .intro-filter{display:none}
   <div id="searchResults"></div>
 </div>
 <datalist id="palette"><option>#963F32</option><option>#606B4C</option><option>#C2A36D</option><option>#39352F</option><option>#D9CDBB</option><option>#7A8C9E</option><option>#B5704F</option><option>#8A6D9E</option></datalist>
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="關閉">✕</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="上一張">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb-nav lb-next" id="lbNext" aria-label="下一張">›</button>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
 <div class="toast" id="toast"></div>
 <input type="file" id="importFile" accept="application/json" style="display:none">
 </div>
@@ -503,72 +555,16 @@ body.owner .intro-filter{display:none}
 <script>
 /* ★★★★★ 設定：把 Google Apps Script 部署後的網址貼在下面兩個引號中間 ★★★★★ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbygfbFELKmos7ukvatFGgGrFT7290AakrNds34i-tOSCUNmjn1Ghuu8xSn1DiRhi7ZF/exec';
+const REQUIRE_CODE = false;   // true＝團員需輸入團體代碼；false＝有連結就能看
 /* ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ */
 const CLOUD = !!API_URL;
 
 /* ================= 預設資料 ================= */
 const DEFAULTS = {
-  meta:{date:'2026-11-18',start:'10:30',end:'14:30',people:6},
-  trip:[
-    {time:'10:30',name:'忠孝停車場',mode:'開車',act:'停車',addr:'722臺南市佳里區東寧里進學路213號',spot:''},
-    {time:'10:40',name:'振興肉脯舖',mode:'步行',act:'買點心',addr:'722臺南市佳里區東寧里中山路343號',spot:'zhenxing'},
-    {time:'10:45',name:'金唐殿',mode:'步行',act:'佳里區信仰中心',addr:'722臺南市佳里區建南里中山路289號',spot:'jintang'},
-    {time:'11:15',name:'佳里中山公有零售市場',mode:'步行',act:'老街、米苔目、菜燕、菜炸、豆腐店、南北貨、揪咖哩',addr:'722臺南市佳里區東寧里中山路318號',spot:'market'},
-    {time:'11:45',name:'自分咖啡',mode:'步行',act:'喝咖啡',addr:'722臺南市佳里區東寧里和平街146號',spot:'jibun'},
-    {time:'12:30',name:'忠孝停車場',mode:'步行',act:'開車',addr:'722臺南市佳里區東寧里進學路213號',spot:''},
-    {time:'12:40',name:'廣安宮',mode:'開車',act:'拜拜',addr:'臺南市佳里區建南里新生路441巷94號',spot:'guangan'},
-    {time:'13:00',name:'北頭洋',mode:'開車',act:'步道',addr:'722臺南市佳里區海澄里佳青路一段162號',spot:'beitouyang'},
-    {time:'13:30',name:'佳里糖廠',mode:'開車',act:'吃冰',addr:'722臺南市佳里區六安里六安130號',spot:'sugar'}
-  ],
-  pack:[
-    ['證件與錢','健保卡'],['證件與錢','現金與零錢','市場小吃多半只收現金'],
-    ['隨身物品','手機'],['隨身物品','行動電源與充電線'],['隨身物品','水壺'],['隨身物品','環保餐具'],['隨身物品','衛生紙、濕紙巾'],
-    ['天候與健康','帽子或陽傘'],['天候與健康','防曬乳'],['天候與健康','薄外套','11月早晚溫差'],['天候與健康','輕便雨具'],['天候與健康','常備藥品'],['天候與健康','好走的鞋','步行＋步道'],
-    ['開車與其他','車鑰匙、駕照'],['開車與其他','行車前安全檢查','胎壓、油量、燈號、雨刷'],['開車與其他','保冷袋','菜燕、肉脯帶回家'],['開車與其他','拜拜香油錢']
-  ].map((a,i)=>({id:'p'+i,cat:a[0],name:a[1],note:a[2]||'',done:false})),
-  spots:[
-    {id:'zhenxing',name:'振興肉脯舖',cat:'美食',icon:'脯',addr:'722臺南市佳里區東寧里中山路343號',
-     intro:'中山路上的肉脯老店，是走進佳里老街區的第一站。先買一包當作沿路的點心，也很適合帶回家當伴手禮。\n（可在編輯模式補充店家介紹與照片）',
-     tags:'肉脯、肉鬆、伴手禮',
-     story:'肉脯、肉鬆是臺灣傳統的手工肉品，以豬肉長時間翻炒、烘焙收乾而成，過去是方便保存、配粥配飯的家常好味道。\n（店家的歷史故事請在編輯模式補充）',imgs:[]},
-    {id:'jintang',name:'金唐殿',cat:'信仰',icon:'殿',addr:'722臺南市佳里區建南里中山路289號',
-     intro:'佳里的信仰中心，主祀朱、雷、殷三府千歲，地方上習慣稱為「三千歲」。廟宇為市定古蹟，屋脊與牆面上的剪黏裝飾是參觀重點。',
-     tags:'三府千歲、剪黏、蕭壠香、市定古蹟',
-     story:'日治時期金唐殿重修時，延請來自廣東的剪黏名匠何金龍主持裝飾。他以碎瓷片拼出人物、花鳥與戲齣，色彩鮮豔、人物生動，至今仍是臺灣剪黏藝術的代表作之一，抬頭看屋脊就能找到。\n\n金唐殿三年一科的「蕭壠香」，是臺南北部重要的香科（刈香）祭典之一。舉行時，蜈蚣陣、宋江陣等陣頭繞境庄頭，整個佳里都熱鬧起來。',imgs:[]},
-    {id:'market',name:'佳里中山公有零售市場',cat:'美食',icon:'市',addr:'722臺南市佳里區東寧里中山路318號',
-     intro:'佳里人的大廚房。市場與周邊老街藏著許多老味道，跟著在地人一攤一攤吃過去。',
-     tags:'老街、米苔目、菜燕、菜炸、豆腐店、南北貨、揪咖哩',
-     story:'【菜燕】以石花菜熬煮後放涼凝固，切塊加糖水，是鹽分地帶夏天消暑的古早涼品。\n【米苔目】用米漿製成的粗短米條，甜湯、鹹湯都好吃。\n【菜炸】把蔬菜絲裹上粉漿下鍋油炸，是臺南沿海常見的庶民小吃。\n【南北貨】乾貨、香料、拜拜用品一應俱全，老店的木櫃與秤子很有看頭。\n（各攤店家故事可在編輯模式補充）',imgs:[]},
-    {id:'jibun',name:'自分咖啡',cat:'其他',icon:'啡',addr:'722臺南市佳里區東寧里和平街146號',
-     intro:'逛完市場後找個地方坐下來，喝杯咖啡歇歇腳，聊聊剛剛吃到的好味道。\n（可在編輯模式補充店家介紹與照片）',
-     tags:'咖啡、休息',
-     story:'（店家故事請在編輯模式補充）',imgs:[]},
-    {id:'guangan',name:'廣安宮',cat:'信仰',icon:'宮',addr:'臺南市佳里區建南里新生路441巷94號',
-     intro:'行程中的拜拜站。\n（主祀神明與廟宇介紹請在編輯模式補充）',
-     tags:'拜拜',
-     story:'（廟宇沿革與小故事請在編輯模式補充）',imgs:[]},
-    {id:'beitouyang',name:'北頭洋',cat:'西拉雅',icon:'洋',addr:'722臺南市佳里區海澄里佳青路一段162號',
-     intro:'西拉雅族蕭壠社後裔居住的聚落之一。聚落裡的立長宮是供奉阿立祖的公廨，周邊有平埔文化步道與風車地景，可以散步認識西拉雅文化。',
-     tags:'西拉雅、公廨、阿立祖、步道',
-     story:'西拉雅族的祖靈信仰稱為「阿立祖」。他們以盛水的壺或甕作為祖靈的象徵，學者稱之為「祀壺信仰」，供奉的地方叫做「公廨」。\n\n佳里的舊名「蕭壠」，就是來自西拉雅族的蕭壠社。漢人移入後，部分族人遷往北頭洋一帶，一直守著祖先的信仰。走一趟步道，就是回到佳里最早的名字。',imgs:[]},
-    {id:'sugar',name:'佳里糖廠（蕭壠文化園區）',cat:'歷史',icon:'糖',addr:'722臺南市佳里區六安里六安130號',
-     intro:'百年糖廠改建的文化園區，保留了倉庫群、鐵道與製糖設施，現在是展覽與藝文空間。來這裡一定要吃一支糖廠冰。',
-     tags:'糖業、倉庫群、糖廠冰',
-     story:'1906 年日本明治製糖株式會社在這裡設立「蕭壠製糖所」，佳里從此與甘蔗、五分車與製糖煙囪緊緊相連。戰後由台糖接手為佳里糖廠，停止製糖後，舊倉庫群改造為「蕭壠文化園區」，讓老糖廠以藝術的方式繼續活著。\n\n夏天排隊吃冰、冬天也想來一支——糖廠冰是很多佳里人的童年味道。',imgs:[]}
-  ],
-  intro:[
-    {key:'geo',title:'地理位置',en:'Location',
-     body:'佳里位於臺南市西北部、曾文溪以北的嘉南平原上，屬於臺南沿海的「鹽分地帶」。\n\n東鄰麻豆、南接西港、西連七股與將軍、北界學甲。北有將軍溪、急水溪，南有曾文溪，三條溪流由東向西注入臺灣海峽，佳里正是溪北地區的交通與生活重心之一。'},
-    {key:'origin',title:'佳里的起源與名稱',en:'Origin',
-     body:'佳里最早是西拉雅族「蕭壠社」的居地，蕭壠社是西拉雅四大社之一，荷蘭時期的文獻已有記載。\n\n清代此地沿用「蕭壠」為名。1920 年日治地方改制時，取鄰近舊地名「佳里興」中的「佳里」二字，成為今天的名字。所以老一輩的人提起金唐殿的香科，還是叫它「蕭壠香」。'},
-    {key:'faith',title:'文化與信仰',en:'Faith & Culture',
-     body:'佳里的信仰有兩條線交織在一起。\n\n一條是漢人的王爺信仰：金唐殿是地方信仰中心，三年一科的蕭壠香，陣頭繞境、全庄動員。\n\n另一條是西拉雅族的阿立祖信仰：北頭洋等聚落的公廨裡，以壺甕祭祀祖靈，延續了數百年。廟宇與公廨並存，正是佳里文化的底色。'},
-    {key:'lit',title:'人文・鹽分地帶文學',en:'Literature',
-     body:'日治時期，佳里出了一群用文字書寫故鄉的人。醫師作家吳新榮在佳里行醫，與郭水潭、徐清吉、王登山等人組成「佳里青風會」，後來成立「臺灣文藝聯盟佳里支部」。\n\n他們的作品充滿海風、鹽田與農村生活，被稱為「鹽分地帶文學」，在臺灣新文學史上占有一席之地。鹽分地帶文藝營延續至今，讓這片土地的文學香火不斷。'},
-    {key:'food',title:'佳里美食與農特產品',en:'Food & Produce',
-     body:'佳里的好味道多藏在市場與老街裡：一包肉脯、一碗米苔目、一塊冰涼的菜燕、一份剛起鍋的菜炸，最後用一支糖廠冰收尾。\n\n早年大片的甘蔗田撐起了製糖產業；今日溪北平原依然種植稻米、蔬菜與瓜果，四季都有在地的收成。\n（農特產品可在編輯模式補充）'}
-  ],
+  meta:{date:'2026-11-18',start:'10:30',end:'14:30'},
+  trip:[],pack:[],spots:[],intro:[],
   cats:[{name:'信仰',color:'#963F32'},{name:'西拉雅',color:'#606B4C'},{name:'美食',color:'#D9CDBB'},{name:'歷史',color:'#C2A36D'},{name:'其他',color:'#39352F'}]
+
 };
 DEFAULTS.days=[{date:DEFAULTS.meta.date,start:DEFAULTS.meta.start,end:DEFAULTS.meta.end,trip:DEFAULTS.trip}];
 const DATA_KEYS=['days','pack','spots','intro','cats'];
@@ -680,6 +676,9 @@ function renderTrip(){
       <div class="field"><label>地址</label><input data-f="addr" value="${esc(t.addr)}"></div>
       <div class="edit-tools"><button class="icon-btn" data-act="up">↑</button><button class="icon-btn" data-act="down">↓</button><button class="icon-btn danger" data-act="del">🗑</button></div></div>`;});
     h+=`<div style="padding:0 16px"><button class="btn btn-olive btn-block" id="tripAddRow">＋ 新增一站</button></div>
+    <div class="settings cloud-only" ${REQUIRE_CODE?'':'hidden'}><h4>🔑 團體代碼</h4><p class="hint" style="padding:0;margin:0 0 10px">團員輸入這組代碼才看得到行程。帶新團時換一組新代碼，舊代碼立即失效，舊團員就看不到了。</p>
+    <div class="cat-row"><input type="text" id="codeInput" value="${esc(curViewCode)}" placeholder="例如：JIALI1118" autocapitalize="characters"><button class="btn btn-primary btn-sm" id="codeSave">更新代碼</button></div>
+    <p class="hint" style="padding:0;margin:6px 0 0">${curViewCode?'目前代碼：<b>'+esc(curViewCode)+'</b>':'⚠️ 尚未設定代碼，目前團員都無法查看'}</p></div>
     <div class="settings"><h4>資料備份</h4><p class="hint" style="padding:0;margin:0 0 10px">資料存在這支手機的瀏覽器裡。換手機或分享給同行者前，可先匯出備份檔。</p>
     <div class="actions local-only no-cloud" style="margin-bottom:8px"><button class="btn btn-primary btn-sm" id="shareBtn">📤 下載分享版（同行者用・不可編輯）</button></div>
     <div class="actions"><button class="btn btn-soft btn-sm local-only" id="exportBtn">⬇ 匯出備份</button><button class="btn btn-soft btn-sm" id="importBtn">⬆ 匯入備份</button><button class="btn btn-ghost btn-sm" id="resetBtn">↺ 還原預設</button></div></div>`;
@@ -725,6 +724,12 @@ function bindTripEdit(){
   if($('#dayDel'))$('#dayDel').onclick=async()=>{if(!await confirmBox('刪除第'+(curDay+1)+'天？','這一天的所有行程站點都會刪除。','刪除'))return;
     S.days.splice(curDay,1);setDay(Math.min(curDay,S.days.length-1));save('days');renderMeta();renderTrip();renderSpots();};
   $('#tripAddRow').onclick=()=>{const last=S.trip[S.trip.length-1];S.trip.push({time:last?last.time:S.meta.start,name:'新站點',mode:'開車',act:'',addr:'',spot:''});save('trip');renderTrip();setTimeout(()=>v.querySelector('.edit-card[data-i]:last-of-type')?.scrollIntoView({behavior:'smooth',block:'center'}),50);};
+  if($('#codeSave'))$('#codeSave').onclick=async()=>{const c=$('#codeInput').value.trim();
+    if(c.length<4){toast('代碼至少 4 個字');return;}
+    if(!await confirmBox('更新團體代碼？','新代碼：'+c+'\n舊代碼會立即失效，拿舊代碼的人將無法再查看。','更新'))return;
+    try{const r=await api({action:'setcode',pw:getPw(),code:c});
+      if(r.ok){curViewCode=c;toast('✓ 已更新團體代碼');renderTrip();}else toast(r.error==='wrong_password'?'密碼錯誤，請重新登入':'⚠️ 更新失敗');
+    }catch(e){toast('⚠️ 連不上雲端');}};
   $('#exportBtn').onclick=exportData;$('#shareBtn').onclick=exportShare;$('#importBtn').onclick=()=>$('#importFile').click();
   $('#resetBtn').onclick=async()=>{if(!await confirmBox('還原預設資料？','行程、行李、站點與介紹都會回到最初版本，上傳的照片也會清除。','還原'))return;
     DATA_KEYS.forEach(k=>{S[k]=clone(DEFAULTS[k]);save(k);});setDay(0);renderAll();toast('已還原預設');publishLive();};
@@ -782,6 +787,7 @@ let spotFilter='',catManage=false;
 function catOf(name){return S.cats.find(c=>c.name===name)||{name:name||'未分類',color:'#39352F'};}
 function txtOn(hex){const h=String(hex||'#000').replace('#','');const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
   return (0.299*r+0.587*g+0.114*b)/255>0.62?'#39352F':'#F3EEE3';}
+function safeUrl(u){u=String(u||'').trim();if(!u)return '';if(!/^https?:\/\//i.test(u)){if(/^[a-z]+:/i.test(u))return '';u='https://'+u;}return u;}
 function findStop(id){for(let di=0;di<S.days.length;di++){const t=S.days[di].trip.find(x=>x.spot===id);if(t)return {di,t};}return null;}
 function renderCatFilter(){
   const counts={};S.spots.forEach(s=>counts[s.cat]=(counts[s.cat]||0)+1);
@@ -825,7 +831,7 @@ function renderSpots(){
     const fs=findStop(s.id),t=fs&&fs.t;const mode=t?t.mode:'開車';const cc=catOf(s.cat);
     h+=`<div class="spot ${open?'open':''}" id="spot-${s.id}" style="border-top:4px solid ${esc(cc.color)}">
       <div class="spot-head" data-toggle="${s.id}">
-        <div class="meta"><div class="ttl" style="background:${esc(cc.color)};color:${txtOn(cc.color)}">${esc(s.name)}</div><div class="sub">${t?'⏰ '+(S.days.length>1?'第'+(fs.di+1)+'天 ':'')+esc(t.time)+'・':''}${esc(s.cat)}・${esc(splitTags(s.tags).slice(0,3).join('・'))}</div></div>
+        <div class="meta"><div class="ttl-row"><div class="ttl" style="background:${esc(cc.color)};color:${txtOn(cc.color)}">${esc(s.name)}</div>${(s.addr||'').trim()?`<a class="ext-btn map-ico" data-ext href="${mapUrl(s.addr,mode)}" target="_blank" rel="noopener" title="Google Map 導航" aria-label="用 Google Map 導航到${esc(s.name)}"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></a>`:''}${safeUrl(s.url)?`<a class="ext-btn" data-ext href="${esc(safeUrl(s.url))}" target="_blank" rel="noopener" title="開啟網站" aria-label="開啟${esc(s.name)}的網站"><svg viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a>`:''}</div><div class="sub">${t?'⏰ '+(S.days.length>1?'第'+(fs.di+1)+'天 ':'')+esc(t.time)+'・':''}${esc(s.cat)}・${esc(splitTags(s.tags).slice(0,3).join('・'))}</div></div>
         <div class="arrow">▼</div></div>
       <div class="spot-body"><div class="spot-inner">`;
     if(editingSpot===s.id){
@@ -840,25 +846,26 @@ function renderSpots(){
         <div class="field" style="margin-bottom:8px"><label>特色標籤（用「、」分隔）</label><input data-sf="tags" value="${esc(s.tags)}"></div>
         <div class="field" style="margin-bottom:8px"><label>歷史小故事</label><textarea data-sf="story" rows="6">${esc(s.story)}</textarea></div>
         <div class="field"><label>地址（Google Map 導航用）</label><input data-sf="addr" value="${esc(s.addr)}"></div>
+        <div class="field" style="margin-top:8px"><label>外部網站連結（官網、粉絲專頁等，可空白）</label><input data-sf="url" type="url" inputmode="url" placeholder="https://" value="${esc(s.url||'')}"></div>
         <div class="edit-tools" style="justify-content:space-between;margin-top:10px">
           <button class="btn btn-ghost btn-sm" data-delspot="${s.id}">🗑 刪除站點</button>
           <button class="btn btn-primary btn-sm" data-donespot="${s.id}">✓ 完成</button></div></div>`;
     }else{
-      h+=(s.imgs&&s.imgs.length)?`<div class="gallery">${s.imgs.map(src=>`<img src="${src}" loading="lazy" alt="${esc(s.name)}">`).join('')}</div>`
+      h+=(s.imgs&&s.imgs.length)?`<div class="gallery">${s.imgs.map((src,k)=>`<img src="${src}" loading="lazy" alt="${esc(s.name)}" data-lb="${s.id}" data-k="${k}">`).join('')}</div>`
         :`<div class="cover-empty owner-only">📷 按「編輯」上傳照片</div>`;
       h+=`<p>${esc(s.intro)}</p>
         <div class="chips">${splitTags(s.tags).map(x=>`<span class="chip ${s.cat==='信仰'?'brick':s.cat==='歷史'?'gold':''}">${esc(x)}</span>`).join('')}</div>
         <div class="story ${openStory.has(s.id)?'show':''}" id="story-${s.id}"><h4>📜 歷史小故事</h4>${esc(s.story)}</div>
         <div class="actions">
           <button class="link-btn" data-story="${s.id}">${openStory.has(s.id)?'收合小故事 ▲':'📜 歷史小故事 ▼'}</button>
-          <a class="map-btn" href="${mapUrl(s.addr,mode)}" target="_blank" rel="noopener">📍 Google Map</a>
           <button class="btn btn-soft btn-sm owner-only" data-editspot="${s.id}" style="border-radius:10px">✏️ 編輯</button>
         </div>`;
     }
     h+='</div></div></div>';
   });
   const L=$('#spotList');L.innerHTML=h;
-  L.querySelectorAll('[data-toggle]').forEach(el=>el.onclick=()=>{const id=el.dataset.toggle;openSpots.has(id)?openSpots.delete(id):openSpots.add(id);$('#spot-'+id).classList.toggle('open');});
+  L.querySelectorAll('[data-toggle]').forEach(el=>el.onclick=e=>{if(e.target.closest('[data-ext]'))return;const id=el.dataset.toggle;openSpots.has(id)?openSpots.delete(id):openSpots.add(id);$('#spot-'+id).classList.toggle('open');});
+  L.querySelectorAll('[data-lb]').forEach(im=>im.onclick=()=>openLightbox(im.dataset.lb,+im.dataset.k));
   L.querySelectorAll('[data-story]').forEach(b=>b.onclick=()=>{const id=b.dataset.story;const st=$('#story-'+id);
     if(openStory.has(id)){openStory.delete(id);st.classList.remove('show');b.innerHTML='📜 歷史小故事 ▼';}else{openStory.add(id);st.classList.add('show');b.innerHTML='收合小故事 ▲';}});
   L.querySelectorAll('[data-editspot]').forEach(b=>b.onclick=()=>{editingSpot=b.dataset.editspot;renderSpots();});
@@ -1036,7 +1043,7 @@ if(!PUB&&!CLOUD){
 }
 
 /* ================= 線上即時版（Claude 發布網頁） ================= */
-const HEAD='<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="theme-color" content="#F3EEE3">\n<title>一起回佳｜佳里 2026.11.18</title>\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">\n';
+const HEAD='<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="theme-color" content="#F3EEE3">\n<title>一起回佳</title>\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">\n';
 let dirty=false;
 function markDirty(){if(!(LIVE||CLOUD)||!document.body.classList.contains('owner'))return;dirty=true;document.body.classList.add('dirty');}
 let publishing=false;
@@ -1078,7 +1085,9 @@ async function api(body){
   const url=body?API_URL:API_URL+(API_URL.includes('?')?'&':'?')+'t='+Date.now();
   return (await fetch(url,opt)).json();
 }
-let cloudVer=null;
+let cloudVer=null,curViewCode='';
+function getCode(){try{return localStorage.getItem('huijia_code')||'';}catch(e){return '';}}
+function setCode(c){try{c?localStorage.setItem('huijia_code',c):localStorage.removeItem('huijia_code');}catch(e){}}
 function isBusy(){return tripEdit||packManage||introEdit||editingSpot||catManage||dirty||publishing;}
 function applyData(d){
   d=normalize(d);['days','spots','intro','cats'].forEach(k=>{if(d[k])S[k]=d[k];});setDay(curDay);ensureCats();
@@ -1086,13 +1095,33 @@ function applyData(d){
   try{localStorage.setItem('huijia_cloud_cache',JSON.stringify(d));}catch(e){}
   renderAll();
 }
+function showGate(msg){$('#gateMsg').textContent=msg||'';$('#gateInput').value='';$('#gate').classList.add('show');}
+function lockOut(msg){
+  setCode('');try{localStorage.removeItem('huijia_cloud_cache');}catch(e){}
+  DATA_KEYS.forEach(k=>{if(k!=='cats')S[k]=clone(DEFAULTS[k]);});S.pack.forEach(p=>p.done=false);setDay(0);renderAll();
+  showGate(msg||'這團行程已結束或代碼已更換，請向導覽員索取新代碼');
+}
+async function viewerGet(code,versionOnly){
+  const q=(API_URL.includes('?')?'&':'?')+(versionOnly?'action=version&':'')+'code='+encodeURIComponent(code)+'&t='+Date.now();
+  return (await fetch(API_URL+q,{cache:'no-store'})).json();
+}
+async function fetchData(versionOnly){
+  if(getPw())return api({action:'get',pw:getPw(),versionOnly:!!versionOnly});
+  return viewerGet(getCode(),versionOnly);
+}
 async function cloudFetch(first){
   if(!CLOUD||isBusy())return;
+  if(REQUIRE_CODE&&!getPw()&&!getCode()){showGate();return;}
   try{
-    if(!first){const v=await (await fetch(API_URL+(API_URL.includes('?')?'&':'?')+'action=version&t='+Date.now(),{cache:'no-store'})).json();if(v.version===cloudVer)return;}
-    const r=await api();if(!r.ok)return;
+    if(!first){const v=await fetchData(true);
+      if(!v.ok){if(v.error==='need_code'&&!getPw())lockOut();else if(v.error==='wrong_password'){setOwner(false);}return;}
+      if(v.code!==undefined)curViewCode=v.code;
+      if(v.version===cloudVer)return;}
+    const r=await fetchData(false);
+    if(!r.ok){if(r.error==='need_code'&&!getPw())lockOut();else if(r.error==='wrong_password'){toast('密碼已變更，請重新登入');setOwner(false);}return;}
+    if(r.code!==undefined)curViewCode=r.code;
     if(isBusy())return;
-    cloudVer=r.version;if(r.data)applyData(r.data);
+    cloudVer=r.version;if(r.data)applyData(r.data);else renderAll();
   }catch(e){}
 }
 async function cloudSave(){
@@ -1112,6 +1141,16 @@ if(CLOUD){
   document.body.classList.add('cloud');
   $('#ownerText').textContent='✏️ 編輯者模式・按「完成」就同步給所有人';
   if(getPw())document.body.classList.add('owner');
+  else if(REQUIRE_CODE&&!getCode())showGate();
+  $('#gateBtn').onclick=async()=>{const c=$('#gateInput').value.trim();if(!c){$('#gateInput').focus();return;}
+    $('#gateBtn').textContent='確認中…';
+    try{const r=await viewerGet(c,false);
+      if(r.ok){setCode(c);cloudVer=r.version;if(r.data)applyData(r.data);$('#gate').classList.remove('show');}
+      else $('#gateMsg').textContent='代碼不正確，或這團行程已結束';
+    }catch(e){$('#gateMsg').textContent='連不上網路，請稍後再試';}
+    $('#gateBtn').textContent='進入';};
+  $('#gateInput').onkeydown=e=>{if(e.key==='Enter')$('#gateBtn').click();};
+  $('#gateOwner').onclick=()=>{$('#pwInput').value='';$('#pwModal').classList.add('show');setTimeout(()=>$('#pwInput').focus(),50);};
   let taps=0,tapT;
   $('.brand').onclick=()=>{taps++;clearTimeout(tapT);tapT=setTimeout(()=>taps=0,1500);
     if(taps<5||document.body.classList.contains('owner'))return;taps=0;
@@ -1122,11 +1161,11 @@ if(CLOUD){
     const pw=$('#pwInput').value;if(!pw)return;$('#pwYes').textContent='驗證中…';
     try{const r=await api({action:'login',pw});
       if(r.ok){try{localStorage.setItem('huijia_cloud_pw',pw);}catch(e){}$('#pwModal').classList.remove('show');
-        document.body.classList.add('owner');renderAll();toast('🔓 已開啟編輯者模式');}
+        document.body.classList.add('owner');$('#gate').classList.remove('show');renderAll();cloudFetch(true);toast('🔓 已開啟編輯者模式');}
       else toast('密碼錯誤');
     }catch(e){toast('⚠️ 連不上雲端，請檢查網路');}
     $('#pwYes').textContent='登入';};
-  $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已登出，目前為唯讀畫面');};
+  $('#lockBtn').onclick=()=>{setOwner(false);toast('🔒 已登出，目前為唯讀畫面');if(REQUIRE_CODE&&!getCode())lockOut('已登出。團員請輸入團體代碼');else cloudFetch(true);};
   setTimeout(()=>cloudFetch(true),0);
   setInterval(()=>{if(document.visibilityState==='visible')cloudFetch(false);},30000);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')cloudFetch(false);});
@@ -1139,6 +1178,22 @@ function switchTab(name){
   window.scrollTo({top:0});try{sessionStorage.setItem(KEY+'tab',name);}catch(e){}
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+
+/* ================= 圖片放大 ================= */
+let lbList=[],lbIdx=0,lbName='';
+function lbShow(){const n=lbList.length;$('#lbImg').src=lbList[lbIdx];$('#lbImg').alt=lbName;
+  $('#lbCap').textContent=lbName+(n>1?'　'+(lbIdx+1)+' / '+n:'');
+  $('#lbPrev').style.display=$('#lbNext').style.display=n>1?'':'none';}
+function openLightbox(id,k){const sp=S.spots.find(x=>x.id===id);if(!sp||!sp.imgs||!sp.imgs.length)return;
+  lbList=sp.imgs;lbIdx=k||0;lbName=sp.name;lbShow();$('#lightbox').classList.add('show');document.body.style.overflow='hidden';}
+function closeLightbox(){$('#lightbox').classList.remove('show');document.body.style.overflow='';}
+function lbStep(d){if(lbList.length<2)return;lbIdx=(lbIdx+d+lbList.length)%lbList.length;lbShow();}
+$('#lbClose').onclick=closeLightbox;$('#lbPrev').onclick=e=>{e.stopPropagation();lbStep(-1);};$('#lbNext').onclick=e=>{e.stopPropagation();lbStep(1);};
+$('#lightbox').onclick=e=>{if(e.target.id==='lightbox')closeLightbox();};
+document.addEventListener('keydown',e=>{if(!$('#lightbox').classList.contains('show'))return;
+  if(e.key==='Escape')closeLightbox();else if(e.key==='ArrowLeft')lbStep(-1);else if(e.key==='ArrowRight')lbStep(1);});
+let lbX=null;$('#lightbox').addEventListener('touchstart',e=>{lbX=e.touches[0].clientX;},{passive:true});
+$('#lightbox').addEventListener('touchend',e=>{if(lbX===null)return;const dx=e.changedTouches[0].clientX-lbX;lbX=null;if(Math.abs(dx)>50)lbStep(dx<0?1:-1);});
 
 /* ================= 站內搜尋 ================= */
 const TABC={'行程':'#606B4C','站點':'#39352F','來「佳」':'#C2A36D','行李':'#963F32'};
